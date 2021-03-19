@@ -17,8 +17,10 @@ CSimpleSprite *testSprite;
 CSimpleSprite *testSprite2;
 
 bool InEditorMode, hasNodePoint1, hasNodePoint2, CanDrawLine;
-std::vector<int> LineNodes; 
-
+std::vector<int> LineNodesSX; 
+std::vector<int> LineNodesSY;
+std::vector<int> LineNodesEX;
+std::vector<int> LineNodesEY;
 enum
 {
 	ANIM_FORWARDS,
@@ -39,6 +41,21 @@ void Init()
 	CanDrawLine = false;
 	hasNodePoint1 = false; 
 	hasNodePoint2 = false; 
+
+	LineNodesSX.push_back(1100);
+	LineNodesSY.push_back(50);
+	LineNodesEX.push_back(750);
+	LineNodesEY.push_back(50);
+
+	LineNodesSX.push_back(750);
+	LineNodesSY.push_back(50);
+	LineNodesEX.push_back(750);
+	LineNodesEY.push_back(350);
+
+	LineNodesSX.push_back(750);
+	LineNodesSY.push_back(50);
+	LineNodesEX.push_back(750);
+	LineNodesEY.push_back(350);
 
 	testSprite = App::CreateSprite(".\\TestData\\Test.bmp", 8, 4);
 	testSprite->SetPosition(400.0f, 400.0f);
@@ -118,8 +135,7 @@ void Update(float deltaTime)
 			float mousePosx, mousePosy;
 			App::GetMousePos(mousePosx, mousePosy);
 
-			LineNodes.push_back(mousePosx); 
-			LineNodes.push_back(mousePosy);
+
 		}
 	}
 
@@ -130,8 +146,7 @@ void Update(float deltaTime)
 			float mousePosx, mousePosy;
 			App::GetMousePos(mousePosx, mousePosy);
 
-			LineNodes.push_back(mousePosx);
-			LineNodes.push_back(mousePosy);
+\
 
 			hasNodePoint1 = false; 
 			hasNodePoint2 = false; 
@@ -215,7 +230,7 @@ void Render()
 		App::DrawLine(sx, sy, ex, ey,r,g,b);
 	}
 	*/
-	App::DrawLine(1, 1, 600, 600, r, g, b);
+	
 
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
@@ -223,13 +238,8 @@ void Render()
 	testSprite2->Draw();
 	//------------------------------------------------------------------------
 
-
-	for (int i = 0; i < LineNodes.size(); i++) {		
-		if (LineNodes.size() > 6) {
-			App::DrawLine(LineNodes[0], LineNodes[1], LineNodes[2], LineNodes[3], r, g, b);
-			App::DrawLine(LineNodes[4], LineNodes[5], LineNodes[6], LineNodes[7], r, g, b);
-		}
-	}
+	App::DrawLine(LineNodesSX[0], LineNodesSY[0], LineNodesEX[0], LineNodesEY[0], r, g, b);
+	App::DrawLine(LineNodesSX[1], LineNodesSY[1], LineNodesEX[1], LineNodesEY[1], r, g, b);
 
 
 	App::Print(100, 100, "E - Editor Mode");
