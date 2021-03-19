@@ -17,7 +17,7 @@ CSimpleSprite *testSprite;
 CSimpleSprite *testSprite2;
 
 bool InEditorMode, hasNodePoint1, hasNodePoint2, CanDrawLine;
-std::vector<std::vector<int>> LineNodes; 
+std::vector<int> LineNodes; 
 
 enum
 {
@@ -118,8 +118,8 @@ void Update(float deltaTime)
 			float mousePosx, mousePosy;
 			App::GetMousePos(mousePosx, mousePosy);
 
-			std::vector<int> tempLineNode(mousePosx, mousePosy); 
-			LineNodes.push_back(tempLineNode); 
+			LineNodes.push_back(mousePosx); 
+			LineNodes.push_back(mousePosy);
 		}
 	}
 
@@ -130,8 +130,8 @@ void Update(float deltaTime)
 			float mousePosx, mousePosy;
 			App::GetMousePos(mousePosx, mousePosy);
 
-			std::vector<int> tempLineNode(mousePosx, mousePosy);
-			LineNodes.push_back(tempLineNode);
+			LineNodes.push_back(mousePosx);
+			LineNodes.push_back(mousePosy);
 
 			hasNodePoint1 = false; 
 			hasNodePoint2 = false; 
@@ -223,12 +223,11 @@ void Render()
 	testSprite2->Draw();
 	//------------------------------------------------------------------------
 
-	if (CanDrawLine) {
-		for (int i = 0; i < LineNodes.size(); i++) {
-			for (int j = 0; j < LineNodes[i].size(); j++) {
-			
-			
-			}
+
+	for (int i = 0; i < LineNodes.size(); i++) {		
+		if (LineNodes.size() > 6) {
+			App::DrawLine(LineNodes[0], LineNodes[1], LineNodes[2], LineNodes[3], r, g, b);
+			App::DrawLine(LineNodes[4], LineNodes[5], LineNodes[6], LineNodes[7], r, g, b);
 		}
 	}
 
