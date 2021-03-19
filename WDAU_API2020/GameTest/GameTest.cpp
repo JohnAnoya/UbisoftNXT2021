@@ -16,6 +16,9 @@
 CSimpleSprite *testSprite;
 CSimpleSprite *testSprite2;
 
+bool InEditorMode, hasNodePoint1, hasNodePoint2, CanDrawLine;
+std::vector<std::vector<int>> LineNodes; 
+
 enum
 {
 	ANIM_FORWARDS,
@@ -32,7 +35,10 @@ void Init()
 {
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
-	
+	InEditorMode = false; 
+	CanDrawLine = false;
+	hasNodePoint1 = false; 
+	hasNodePoint2 = false; 
 
 	testSprite = App::CreateSprite(".\\TestData\\Test.bmp", 8, 4);
 	testSprite->SetPosition(400.0f, 400.0f);
@@ -95,11 +101,44 @@ void Update(float deltaTime)
 
 	}
 
-	if (App::IsKeyPressed(VK_LBUTTON)) {
-		testSprite->SetScale(testSprite->GetScale() + 0.1f);
+	if (App::IsKeyPressed('E')) {
+		if (!InEditorMode) {
+			InEditorMode = true;
+		}
+
+		else {
+			InEditorMode = false; 
+		}
 	}
 
-	if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_UP, false))
+	if (App::IsKeyPressed(VK_LBUTTON) && InEditorMode) {
+		if (!hasNodePoint1) {
+			hasNodePoint1 = true; 
+
+			float mousePosx, mousePosy;
+			App::GetMousePos(mousePosx, mousePosy);
+
+			std::vector<int> tempLineNode(mousePosx, mousePosy); 
+			LineNodes.push_back(tempLineNode); 
+		}
+	}
+
+	if (App::IsKeyPressed(VK_RBUTTON) && InEditorMode) {
+		if (hasNodePoint1 && !hasNodePoint2) {
+			hasNodePoint2 = true;
+
+			float mousePosx, mousePosy;
+			App::GetMousePos(mousePosx, mousePosy);
+
+			std::vector<int> tempLineNode(mousePosx, mousePosy);
+			LineNodes.push_back(tempLineNode);
+
+			hasNodePoint1 = false; 
+			hasNodePoint2 = false; 
+		}
+	}
+
+	/*if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_UP, false))
 	{
 		//testSprite->SetScale(testSprite->GetScale() + 0.1f);
 	}
@@ -122,7 +161,8 @@ void Update(float deltaTime)
 	if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
 	{
 		testSprite->SetVertex(0, testSprite->GetVertex(0) + 5.0f);
-	}
+	}*/ 
+
 	//------------------------------------------------------------------------
 	// Sample Sound.
 	//------------------------------------------------------------------------
@@ -183,10 +223,27 @@ void Render()
 	testSprite2->Draw();
 	//------------------------------------------------------------------------
 
-	//------------------------------------------------------------------------
-	// Example Text.
-	//------------------------------------------------------------------------
-	App::Print(100, 100, "Sample Text");
+	if (CanDrawLine) {
+		for (int i = 0; i < LineNodes.size(); i++) {
+			for (int j = 0; j < LineNodes[i].size(); j++) {
+			
+			
+			}
+		}
+	}
+
+
+	App::Print(100, 100, "E - Editor Mode");
+
+	float x, y;
+	App::GetMousePos(x, y);
+	std::string MousePos = "Mouse Position " + std::to_string(x) + ", " + std::to_string(y);
+	App::Print(0, 0, MousePos.c_str());
+
+	if (InEditorMode) {
+		App::Print(650, 100, "Note: Left Click to add the first Node point!");
+		App::Print(650,  50, "Right Click to add the second Node point!");
+	}
 }
 //------------------------------------------------------------------------
 // Add your shutdown code here. Called when the APP_QUIT_KEY is pressed.

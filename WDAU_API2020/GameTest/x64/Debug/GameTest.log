@@ -1,5 +1,17 @@
 ﻿  GameTest.cpp
-C:\Users\johna\Desktop\WDAU_API2020\GameTest\GameTest.cpp(143,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  GameTest.vcxproj -> C:\Users\johna\Desktop\WDAU_API2020\x64\Debug\GameTest.exe
-  C:\Users\johna\Desktop\WDAU_API2020\\GameTest\glut\bin\x64\freeglut.dll
+C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(121,45): warning C4244: 'argument': conversion from 'float' to 'const _Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(121,34): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(133,45): warning C4244: 'argument': conversion from 'float' to 'const _Ty', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(133,34): warning C4244: 'argument': conversion from 'float' to 'const unsigned __int64', possible loss of data
+C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(183,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  GameTest.vcxproj -> C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\x64\Debug\GameTest.exe
+  C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\\GameTest\glut\bin\x64\freeglut.dll
   1 File(s) copied
