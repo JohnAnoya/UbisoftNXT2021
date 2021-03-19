@@ -1,0 +1,5 @@
+﻿  GameTest.cpp
+C:\Users\johna\Desktop\WDAU_API2020\GameTest\GameTest.cpp(143,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  GameTest.vcxproj -> C:\Users\johna\Desktop\WDAU_API2020\x64\Debug\GameTest.exe
+  C:\Users\johna\Desktop\WDAU_API2020\\GameTest\glut\bin\x64\freeglut.dll
+  1 File(s) copied
