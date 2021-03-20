@@ -28,6 +28,8 @@
     <ClCompile Include="Giant.cpp" />
     <ClCompile Include="BasicSpaceShip.cpp" />
     <ClCompile Include="DefaultBullet.cpp" />
+    <ClCompile Include="BrawlerSpaceShip.cpp" />
+    <ClCompile Include="FastBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\app.h">
@@ -65,6 +67,8 @@
     <ClInclude Include="BasicSpaceShip.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="DefaultBullet.h" />
+    <ClInclude Include="BrawlerSpaceShip.h" />
+    <ClInclude Include="FastBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

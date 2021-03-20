@@ -185,10 +185,12 @@
     <ClInclude Include="App\TextureLoader.h" />
     <ClInclude Include="BalancedEnemy.h" />
     <ClInclude Include="BasicSpaceShip.h" />
+    <ClInclude Include="BrawlerSpaceShip.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="DefaultBullet.h" />
     <ClInclude Include="Dwarf.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="FastBullet.h" />
     <ClInclude Include="Giant.h" />
     <ClInclude Include="SpaceShipTower.h" />
     <ClInclude Include="stdafx.h" />
@@ -203,8 +205,10 @@
     <ClCompile Include="App\TextureLoader.cpp" />
     <ClCompile Include="BalancedEnemy.cpp" />
     <ClCompile Include="BasicSpaceShip.cpp" />
+    <ClCompile Include="BrawlerSpaceShip.cpp" />
     <ClCompile Include="DefaultBullet.cpp" />
     <ClCompile Include="Dwarf.cpp" />
+    <ClCompile Include="FastBullet.cpp" />
     <ClCompile Include="GameTest.cpp" />
     <ClCompile Include="Giant.cpp" />
     <ClCompile Include="stdafx.cpp">

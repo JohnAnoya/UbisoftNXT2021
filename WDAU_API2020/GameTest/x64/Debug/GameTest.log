@@ -1,4 +1,7 @@
-﻿  DefaultBullet.cpp
+﻿  BrawlerSpaceShip.cpp
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\BrawlerSpaceShip.cpp(127,30): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  FastBullet.cpp
+  Generating Code...
   GameTest.vcxproj -> C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\x64\Debug\GameTest.exe
   C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\\GameTest\glut\bin\x64\freeglut.dll
   1 File(s) copied

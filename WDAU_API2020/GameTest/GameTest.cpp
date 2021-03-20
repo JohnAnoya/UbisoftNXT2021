@@ -12,6 +12,7 @@
 #include "BalancedEnemy.h"
 #include "Giant.h"
 #include "BasicSpaceShip.h"
+#include "BrawlerSpaceShip.h"
 //------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
@@ -94,7 +95,7 @@ void Update(float deltaTime)
 		float mousePosx, mousePosy;
 		App::GetMousePos(mousePosx, mousePosy);
 
-		BasicSpaceShip* newTower = new BasicSpaceShip(); 
+		BrawlerSpaceShip* newTower = new BrawlerSpaceShip(); 
 		newTower->SetPosition(mousePosx, mousePosy);
 
 		towerList.push_back(newTower);
