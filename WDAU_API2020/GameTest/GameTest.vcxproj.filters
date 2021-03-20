@@ -27,6 +27,7 @@
     <ClCompile Include="BalancedEnemy.cpp" />
     <ClCompile Include="Giant.cpp" />
     <ClCompile Include="BasicSpaceShip.cpp" />
+    <ClCompile Include="DefaultBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\app.h">
@@ -62,6 +63,8 @@
     <ClInclude Include="Giant.h" />
     <ClInclude Include="SpaceShipTower.h" />
     <ClInclude Include="BasicSpaceShip.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="DefaultBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

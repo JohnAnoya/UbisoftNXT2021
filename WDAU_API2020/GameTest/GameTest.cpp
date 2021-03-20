@@ -17,6 +17,10 @@
 //------------------------------------------------------------------------
 // Eample data....
 //------------------------------------------------------------------------
+Dwarf* enemyDwarf;
+BalancedEnemy* enemyBalanced; 
+Giant* enemyGiant; 
+
 std::vector<Enemy*> enemyList; 
 std::vector<SpaceShipTower*> towerList;
 
@@ -113,59 +117,67 @@ void Update(float deltaTime)
 	if (!enemyList.empty()) {
 
 		for (auto enemy : enemyList) {
-			enemy->Update(deltaTime);
-
-
-			float enemyPosX, enemyPosY;
-			enemy->GetPosition(enemyPosX, enemyPosY);
-
-
-			float positionX = LineNodesEX[enemy->GetEnemyMoveIndex()] - enemyPosX;
-			float positionY = LineNodesEY[enemy->GetEnemyMoveIndex()] - enemyPosY;
-			distanceFromNodes = sqrt(positionX * positionX + positionY * positionY);
-
-			enemy->SetPosition(enemyPosX + positionX / distanceFromNodes * enemy->GetEnemySpeed(), enemyPosY + positionY / distanceFromNodes * enemy->GetEnemySpeed());
-
-			if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() < 4) {
-				enemy->SetEnemyMoveIndex(enemy->GetEnemyMoveIndex() + 1);
-			}
-
-			else if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() == 4) {
-				OutputDebugStringA("\nEnemy is at the end!");
+			if (enemy->GetEnemyHealth() <= 0.0f) {
 				enemyList.erase(std::remove(enemyList.begin(), enemyList.end(), enemy), enemyList.end());
-				enemy->OnDestroy(); 
+				enemy->OnDestroy();
 				delete enemy;
-				enemy = nullptr; 
+				enemy = nullptr;
 			}
 
-			if (enemy != nullptr) {
-				if (!towerList.empty()) {
-					for (auto tower : towerList) {
-						float towerPosX, towerPosY;
-						tower->GetPosition(towerPosX, towerPosY);
+			else {
+				enemy->Update(deltaTime);
 
-						float positionXTowerFromEnemy = towerPosX - enemyPosX;
-						float positionYTowerFromEnemy = towerPosY - enemyPosY;
+				float enemyPosX, enemyPosY;
+				enemy->GetPosition(enemyPosX, enemyPosY);
 
-					    distanceFromTowerToEnemy = sqrt(positionXTowerFromEnemy * positionXTowerFromEnemy 
-							+ positionYTowerFromEnemy * positionYTowerFromEnemy);
-						if (distanceFromTowerToEnemy < tower->GetRange()) {
-							float tempSprite1PositionX, tempSprite1PositionY;
-							enemy->GetPosition(tempSprite1PositionX, tempSprite1PositionY);
+				float positionX = LineNodesEX[enemy->GetEnemyMoveIndex()] - enemyPosX;
+				float positionY = LineNodesEY[enemy->GetEnemyMoveIndex()] - enemyPosY;
+				distanceFromNodes = sqrt(positionX * positionX + positionY * positionY);
 
-							float tempSprite2PositionX, tempSprite2PositionY;
-							tower->GetPosition(tempSprite2PositionX, tempSprite2PositionY);
+				enemy->SetPosition(enemyPosX + positionX / distanceFromNodes * enemy->GetEnemySpeed(), enemyPosY + positionY / distanceFromNodes * enemy->GetEnemySpeed());
 
-							double directionX = tempSprite1PositionX - tempSprite2PositionX;
-							double directionY = tempSprite1PositionY - tempSprite2PositionY;
+				if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() < 4) {
+					enemy->SetEnemyMoveIndex(enemy->GetEnemyMoveIndex() + 1);
+				}
 
-							float newAngle = atan2(directionX, directionY);
+				else if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() == 4) {
+					OutputDebugStringA("\nEnemy is at the end!");
+					enemyList.erase(std::remove(enemyList.begin(), enemyList.end(), enemy), enemyList.end());
+					enemy->OnDestroy();
+					delete enemy;
+					enemy = nullptr;
+				}
 
+				if (enemy != nullptr) {
+					if (!towerList.empty()) {
+						for (auto tower : towerList) {
+							float towerPosX, towerPosY;
+							tower->GetPosition(towerPosX, towerPosY);
 
-							tower->SetAngle(-newAngle);
+							float positionXTowerFromEnemy = towerPosX - enemyPosX;
+							float positionYTowerFromEnemy = towerPosY - enemyPosY;
+
+							distanceFromTowerToEnemy = sqrt(positionXTowerFromEnemy * positionXTowerFromEnemy
+								+ positionYTowerFromEnemy * positionYTowerFromEnemy);
+							
+							if (distanceFromTowerToEnemy < tower->GetRange()) {
+								float tempSprite1PositionX, tempSprite1PositionY;
+								enemy->GetPosition(tempSprite1PositionX, tempSprite1PositionY);
+
+								float tempSprite2PositionX, tempSprite2PositionY;
+								tower->GetPosition(tempSprite2PositionX, tempSprite2PositionY);
+
+								double directionX = tempSprite1PositionX - tempSprite2PositionX;
+								double directionY = tempSprite1PositionY - tempSprite2PositionY;
+
+								float newAngle = atan2(directionX, directionY);
+
+								tower->SetAngle(-newAngle);
+								tower->AttackClosestEnemy(enemy);
+							}
 						}
 					}
-				}				
+				}
 			}
 		}
 	}
@@ -180,20 +192,20 @@ void Update(float deltaTime)
 				}
 
 				case 0: {
-					Dwarf* enemy = new Dwarf();
-					enemyList.push_back(enemy);
+					enemyDwarf = new Dwarf();
+					enemyList.push_back(enemyDwarf);
 					break;
 				}
 
 				case 1: {
-					BalancedEnemy* enemy = new BalancedEnemy();
-					enemyList.push_back(enemy);
+					 enemyBalanced = new BalancedEnemy();
+					enemyList.push_back(enemyBalanced);
 					break;
 				}
 
 				case 2: {
-					Giant* enemy = new Giant();
-					enemyList.push_back(enemy);
+					enemyGiant = new Giant();
+					enemyList.push_back(enemyGiant);
 					break;
 				}
 			}
@@ -283,6 +295,8 @@ void Shutdown()
 			delete enemy; 
 			enemy = nullptr; 
 		}
+
+		enemyList.clear();
 	}
 
 	if (!towerList.empty()) {
@@ -290,6 +304,8 @@ void Shutdown()
 			delete tower; 
 			tower = nullptr; 
 		}
+
+		towerList.clear();
 	}
 	//------------------------------------------------------------------------
 }

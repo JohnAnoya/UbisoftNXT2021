@@ -7,6 +7,10 @@ BasicSpaceShip::BasicSpaceShip() : SpaceShipTower() {
 	towerSprite->SetFrame(2);
 	towerSprite->SetScale(1.0f);
 	TowerRange = 200.0f; 
+	fireRate = 3; 
+	bulletCurrentLifeTime = 0.0f;
+	defaultShootingWaitTime = 10.0f;
+	isShooting = false; 
 }
 
 BasicSpaceShip::~BasicSpaceShip() {
@@ -15,15 +19,47 @@ BasicSpaceShip::~BasicSpaceShip() {
 
 void BasicSpaceShip::Update(float deltaTime_) {
 	towerSprite->Update(deltaTime_);
+
+	if (!EnemyBullets.empty()) {
+		for (auto bullet : EnemyBullets) {
+			bullet->Update(deltaTime_);
+			
+			bulletCurrentLifeTime += 0.1f;
+			if (bulletCurrentLifeTime >= bullet->GetBulletLifeTime()) {
+				EnemyBullets.erase(std::remove(EnemyBullets.begin(), EnemyBullets.end(), bullet), EnemyBullets.end());
+				bullet->OnDestroy();
+				delete bullet;
+				bullet = nullptr;
+
+				bulletCurrentLifeTime = 0.0f;
+				createNewBulletsTick = 0.0f;
+			}
+		}
+	}
 }
 
 void BasicSpaceShip::Render() {
 	towerSprite->Draw();
+
+	if (!EnemyBullets.empty()) {
+		for (auto bullet : EnemyBullets) {
+			bullet->Render();
+		}
+	}
 }
 
 void BasicSpaceShip::OnDestroy() {
 	delete towerSprite;
 	towerSprite = nullptr; 
+
+	if (!EnemyBullets.empty()) {
+		for (auto bullet : EnemyBullets) {
+			delete bullet; 
+			bullet = nullptr; 
+		}
+
+		EnemyBullets.clear(); 
+	}
 }
 
 void BasicSpaceShip::SetPosition(float x_, float y_) {
@@ -42,6 +78,75 @@ float BasicSpaceShip::GetRange() {
 	return TowerRange;
 }
 
-void BasicSpaceShip::GetClosestEnemy(float enemyPosX_, float enemyPosY_) {
+void BasicSpaceShip::TowerDestroyRemainingBullets() {
+	if (!EnemyBullets.empty()) {
+		for (auto bullet : EnemyBullets) {
+			EnemyBullets.erase(std::remove(EnemyBullets.begin(), EnemyBullets.end(), bullet), EnemyBullets.end());
+			bullet->OnDestroy();
+			delete bullet;
+			bullet = nullptr;
+		}
+	}
+}
 
+void BasicSpaceShip::AttackClosestEnemy(Enemy* enemy_) {
+	if (enemy_ != nullptr) {
+		createNewBulletsTick += 0.1f;
+		if (EnemyBullets.empty() && createNewBulletsTick > defaultShootingWaitTime) {
+			int AmountOfBulletsToFire = std::rand() % fireRate + 1;
+
+			for (int i = 0; i < AmountOfBulletsToFire; i++) {
+				DefaultBullet* newBullet = new DefaultBullet();
+
+				float defaultPositionX, defaultPositionY; 
+				GetPosition(defaultPositionX, defaultPositionY); //Get the SpaceShip Tower's position; 
+				
+				newBullet->SetPosition(defaultPositionX + 50.0f, defaultPositionY);
+				EnemyBullets.push_back(newBullet);
+
+				bulletCurrentLifeTime = 0.0f;
+				createNewBulletsTick = 0.0f; 
+			}
+		}
+
+		else if (!EnemyBullets.empty()) {
+			for (auto bullet : EnemyBullets) {
+				bulletCurrentLifeTime += 0.1f;
+
+				if (bulletCurrentLifeTime > 0.1f) {
+					bullet->SetAngle(towerSprite->GetAngle());
+
+					float enemyPosX, enemyPosY;
+					enemy_->GetPosition(enemyPosX, enemyPosY);
+
+					float bulletPosX, bulletPosY;
+					bullet->GetPosition(bulletPosX, bulletPosY);
+
+					float positionXBulletFromEnemy = enemyPosX - bulletPosX;
+					float positionYBulletFromEnemy = enemyPosY - bulletPosY;
+					float distanceFromEnemy = sqrt(positionXBulletFromEnemy * positionXBulletFromEnemy
+						+ positionYBulletFromEnemy * positionYBulletFromEnemy);
+
+					bullet->SetPosition(bulletPosX + positionXBulletFromEnemy / distanceFromEnemy
+						* bullet->GetBulletSpeed(), bulletPosY + positionYBulletFromEnemy / distanceFromEnemy
+						* bullet->GetBulletSpeed());
+					
+					std::string bulletCurrentLifeTimeDebug = "\nCurrent Bullet Life Time: " + std::to_string(bulletCurrentLifeTime);
+					OutputDebugStringA(bulletCurrentLifeTimeDebug.c_str());
+
+					if (distanceFromEnemy < 50.0f) {
+						enemy_->SetEnemyHealth(enemy_->GetEnemyHealth() - bullet->GetBulletDamage());
+
+						EnemyBullets.erase(std::remove(EnemyBullets.begin(), EnemyBullets.end(), bullet), EnemyBullets.end());
+						bullet->OnDestroy();
+						delete bullet;
+						bullet = nullptr;
+
+						bulletCurrentLifeTime = 0.0f;
+						createNewBulletsTick = 0.0f; 
+					}
+				}
+			}
+		}
+	}
 }

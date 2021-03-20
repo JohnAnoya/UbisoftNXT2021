@@ -185,6 +185,8 @@
     <ClInclude Include="App\TextureLoader.h" />
     <ClInclude Include="BalancedEnemy.h" />
     <ClInclude Include="BasicSpaceShip.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="DefaultBullet.h" />
     <ClInclude Include="Dwarf.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Giant.h" />
@@ -201,6 +203,7 @@
     <ClCompile Include="App\TextureLoader.cpp" />
     <ClCompile Include="BalancedEnemy.cpp" />
     <ClCompile Include="BasicSpaceShip.cpp" />
+    <ClCompile Include="DefaultBullet.cpp" />
     <ClCompile Include="Dwarf.cpp" />
     <ClCompile Include="GameTest.cpp" />
     <ClCompile Include="Giant.cpp" />
