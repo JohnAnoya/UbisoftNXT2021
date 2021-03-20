@@ -1,45 +1,106 @@
 ﻿  GameTest.cpp
-C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(193,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(236,77): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(168,19): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(185,19): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(222,77): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(236,61): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(222,61): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(236,45): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(222,45): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(236,29): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(222,29): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(237,77): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(223,77): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(237,61): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(223,61): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(237,45): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(223,45): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(237,29): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(223,29): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int
           ]
-  GameTest.vcxproj -> C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\x64\Debug\GameTest.exe
-  C:\Users\RuthlessLua\Desktop\UbisoftNXT2021\WDAU_API2020\\GameTest\glut\bin\x64\freeglut.dll
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(224,77): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(224,61): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(224,45): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(224,29): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(225,77): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(225,61): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(225,45): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(225,29): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(226,77): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(226,61): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(226,45): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(226,29): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+  GameTest.vcxproj -> C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\x64\Debug\GameTest.exe
+  C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\\GameTest\glut\bin\x64\freeglut.dll
   1 File(s) copied

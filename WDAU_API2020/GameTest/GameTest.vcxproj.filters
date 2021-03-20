@@ -23,6 +23,7 @@
     <ClCompile Include="App\TextureLoader.cpp">
       <Filter>API</Filter>
     </ClCompile>
+    <ClCompile Include="Dwarf.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\app.h">
@@ -52,6 +53,8 @@
     <ClInclude Include="App\TextureLoader.h">
       <Filter>API</Filter>
     </ClInclude>
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Dwarf.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

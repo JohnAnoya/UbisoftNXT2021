@@ -8,26 +8,24 @@
 #include <stdio.h>
 //------------------------------------------------------------------------
 #include "app\app.h"
+#include "Dwarf.h"
 //------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
 // Eample data....
 //------------------------------------------------------------------------
-CSimpleSprite *testSprite;
 CSimpleSprite *testSprite2;
+
+std::vector<Enemy*> enemyList; 
 
 bool InEditorMode, hasNodePoint1, hasNodePoint2, CanDrawLine;
 std::vector<int> LineNodesSX; 
 std::vector<int> LineNodesSY;
 std::vector<int> LineNodesEX;
 std::vector<int> LineNodesEY;
-enum
-{
-	ANIM_FORWARDS,
-	ANIM_BACKWARDS,
-	ANIM_LEFT,
-	ANIM_RIGHT,
-};
+
+bool EnemyIsMoving = false;
+float distance;
 //------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
@@ -53,18 +51,22 @@ void Init()
 	LineNodesEY.push_back(350);
 
 	LineNodesSX.push_back(750);
-	LineNodesSY.push_back(50);
-	LineNodesEX.push_back(750);
+	LineNodesSY.push_back(350);
+	LineNodesEX.push_back(500);
 	LineNodesEY.push_back(350);
 
-	testSprite = App::CreateSprite(".\\TestData\\Test.bmp", 8, 4);
-	testSprite->SetPosition(400.0f, 400.0f);
-	float speed = 1.0f / 15.0f;
-	testSprite->CreateAnimation(ANIM_BACKWARDS, speed, { 0,1,2,3,4,5,6,7 });
-	testSprite->CreateAnimation(ANIM_LEFT, speed, { 8,9,10,11,12,13,14,15 });
-	testSprite->CreateAnimation(ANIM_RIGHT, speed, { 16,17,18,19,20,21,22,23 });
-	testSprite->CreateAnimation(ANIM_FORWARDS, speed, { 24,25,26,27,28,29,30,31 });
-	testSprite->SetScale(2.0f);
+	LineNodesSX.push_back(500);
+	LineNodesSY.push_back(350);
+	LineNodesEX.push_back(500);
+	LineNodesEY.push_back(600);
+
+	LineNodesSX.push_back(500);
+	LineNodesSY.push_back(600);
+	LineNodesEX.push_back(100);
+	LineNodesEY.push_back(600);
+
+	Dwarf* dwarfEnemy = new Dwarf();
+	enemyList.push_back(dwarfEnemy);
 
 	testSprite2 = App::CreateSprite(".\\TestData\\Ships.bmp", 2, 12);
 	testSprite2->SetPosition(400.0f, 400.0f);	
@@ -81,42 +83,7 @@ void Update(float deltaTime)
 {
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
-	testSprite->Update(deltaTime);
 	testSprite2->Update(deltaTime);
-
-	if (App::GetController().GetLeftThumbStickX() > 0.5f)
-	{
-		testSprite->SetAnimation(ANIM_RIGHT);
-		float x, y;
-		testSprite->GetPosition(x, y);
-		x += 1.0f;
-		testSprite->SetPosition(x, y);
-	}
-	if (App::GetController().GetLeftThumbStickX() < -0.5f)
-	{
-		testSprite->SetAnimation(ANIM_LEFT);
-		float x, y;
-		testSprite->GetPosition(x, y);
-		x -= 1.0f;
-		testSprite->SetPosition(x, y);
-	}
-	if (App::GetController().GetLeftThumbStickY() > 0.5f)
-	{
-		testSprite->SetAnimation(ANIM_FORWARDS);
-		float x, y;
-		testSprite->GetPosition(x, y);
-		y += 1.0f;
-		testSprite->SetPosition(x, y);
-	}
-	if (App::GetController().GetLeftThumbStickY() < -0.5f)
-	{
-		testSprite->SetAnimation(ANIM_BACKWARDS);
-		float x, y;
-		testSprite->GetPosition(x, y);
-		y -= 1.0f;
-		testSprite->SetPosition(x, y);
-
-	}
 
 	if (App::IsKeyPressed('E')) {
 		if (!InEditorMode) {
@@ -186,19 +153,45 @@ void Update(float deltaTime)
 		App::PlaySound(".\\TestData\\Test.wav");
 	}
 
-	float tempSprite1PositionX, tempSprite1PositionY;
-	testSprite->GetPosition(tempSprite1PositionX, tempSprite1PositionY);
+	if (!enemyList.empty()) {
 
-	float tempSprite2PositionX, tempSprite2PositionY;
-	testSprite2->GetPosition(tempSprite2PositionX, tempSprite2PositionY);
+		for (auto enemy : enemyList) {
+			enemy->Update(deltaTime);
 
-	double directionX = tempSprite1PositionX - tempSprite2PositionX;
-	double directionY = tempSprite1PositionY - tempSprite2PositionY;
 
-	float newAngle = atan2(directionX, directionY);
-	
+			float enemyPosX, enemyPosY;
+			enemy->GetPosition(enemyPosX, enemyPosY);
 
-	testSprite2->SetAngle(-newAngle);
+
+			float positionX = LineNodesEX[enemy->GetEnemyMoveIndex()] - enemyPosX;
+			float positionY = LineNodesEY[enemy->GetEnemyMoveIndex()] - enemyPosY;
+			distance = sqrt(positionX * positionX + positionY * positionY);
+
+			enemy->SetPosition(enemyPosX + positionX / distance * 3.0f, enemyPosY + positionY / distance * 3.0f);
+
+			if (distance < 2.0f && enemy->GetEnemyMoveIndex() < 4) {
+				enemy->SetEnemyMoveIndex(enemy->GetEnemyMoveIndex() + 1);
+			}
+
+			float tempSprite1PositionX, tempSprite1PositionY;
+			enemy->GetPosition(tempSprite1PositionX, tempSprite1PositionY);
+
+			float tempSprite2PositionX, tempSprite2PositionY;
+			testSprite2->GetPosition(tempSprite2PositionX, tempSprite2PositionY);
+
+			double directionX = tempSprite1PositionX - tempSprite2PositionX;
+			double directionY = tempSprite1PositionY - tempSprite2PositionY;
+
+			float newAngle = atan2(directionX, directionY);
+
+
+			testSprite2->SetAngle(-newAngle);
+		}
+	}
+
+	else if (enemyList.empty()) {
+		
+	}
 }
 
 //------------------------------------------------------------------------
@@ -230,18 +223,25 @@ void Render()
 		App::DrawLine(sx, sy, ex, ey,r,g,b);
 	}
 	*/
-	
+	App::DrawLine(LineNodesSX[0], LineNodesSY[0], LineNodesEX[0], LineNodesEY[0], r, g, b);
+	App::DrawLine(LineNodesSX[1], LineNodesSY[1], LineNodesEX[1], LineNodesEY[1], r, g, b);
+	App::DrawLine(LineNodesSX[2], LineNodesSY[2], LineNodesEX[2], LineNodesEY[2], r, g, b);
+	App::DrawLine(LineNodesSX[3], LineNodesSY[3], LineNodesEX[3], LineNodesEY[3], r, g, b);
+	App::DrawLine(LineNodesSX[4], LineNodesSY[4], LineNodesEX[4], LineNodesEY[4], r, g, b);
 
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
-	testSprite->Draw();
+	if (!enemyList.empty()) {
+		for (auto enemy : enemyList) {
+			enemy->Render();
+		}
+	}
+
 	testSprite2->Draw();
 	//------------------------------------------------------------------------
 
-	App::DrawLine(LineNodesSX[0], LineNodesSY[0], LineNodesEX[0], LineNodesEY[0], r, g, b);
-	App::DrawLine(LineNodesSX[1], LineNodesSY[1], LineNodesEX[1], LineNodesEY[1], r, g, b);
-
-
+	std::string distanceDebugging = "Distance = " + std::to_string(distance);
+	App::Print(0, 350, distanceDebugging.c_str());
 	App::Print(100, 100, "E - Editor Mode");
 
 	float x, y;
@@ -262,7 +262,11 @@ void Shutdown()
 {	
 	//------------------------------------------------------------------------
 	// Example Sprite Code....
-	delete testSprite;
+	if (!enemyList.empty()) {
+		for (auto enemy : enemyList) {
+			delete enemy; 
+		}
+	}
 	delete testSprite2;
 	//------------------------------------------------------------------------
 }
