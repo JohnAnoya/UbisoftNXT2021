@@ -30,6 +30,8 @@
     <ClCompile Include="DefaultBullet.cpp" />
     <ClCompile Include="BrawlerSpaceShip.cpp" />
     <ClCompile Include="FastBullet.cpp" />
+    <ClCompile Include="SniperSpaceShip.cpp" />
+    <ClCompile Include="SniperBullet.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\app.h">
@@ -69,6 +71,8 @@
     <ClInclude Include="DefaultBullet.h" />
     <ClInclude Include="BrawlerSpaceShip.h" />
     <ClInclude Include="FastBullet.h" />
+    <ClInclude Include="SniperSpaceShip.h" />
+    <ClInclude Include="SniperBullet.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />

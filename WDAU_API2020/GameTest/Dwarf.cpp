@@ -11,6 +11,8 @@ Dwarf::Dwarf() : Enemy() {
 	EnemyMoveIndex = 0; 
 	health = 55.0f; 
 	speed = 3.0f;
+
+	PointsReward = 100;
 }
 
 Dwarf::~Dwarf() {
@@ -31,6 +33,10 @@ float Dwarf::GetEnemyHealth() {
 
 float Dwarf::GetEnemySpeed() {
 	return speed;
+}
+
+int Dwarf::CollectPointsReward() {
+	return PointsReward;
 }
 
 void Dwarf::SetEnemyMoveIndex(int newIndex_) {

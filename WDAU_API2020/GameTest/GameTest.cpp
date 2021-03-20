@@ -13,11 +13,35 @@
 #include "Giant.h"
 #include "BasicSpaceShip.h"
 #include "BrawlerSpaceShip.h"
+#include "SniperSpaceShip.h"
+
+enum class Shop {
+	NONE,
+	BASICSHIP,
+	BRAWLERSHIP,
+	SNIPERSHIP, 
+	HEALTHPOTION
+};
+
+enum class GameState {
+	NOTPLAYING,
+	ISPLAYING,
+};
+
+struct ShopPrices {
+	int BasicShipPrice; 
+	int BrawlerShipPrice;
+	int SniperShipPrice; 
+	int HealthPotion;
+};
+
 //------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
-// Eample data....
+// Game Data
 //------------------------------------------------------------------------
+GameState gameState; 
+
 Dwarf* enemyDwarf;
 BalancedEnemy* enemyBalanced; 
 Giant* enemyGiant; 
@@ -25,7 +49,6 @@ Giant* enemyGiant;
 std::vector<Enemy*> enemyList; 
 std::vector<SpaceShipTower*> towerList;
 
-bool InEditorMode, hasNodePoint1, hasNodePoint2, CanDrawLine;
 std::vector<int> LineNodesSX; 
 std::vector<int> LineNodesSY;
 std::vector<int> LineNodesEX;
@@ -34,19 +57,43 @@ std::vector<int> LineNodesEY;
 bool SpawnEnemies; 
 float distanceFromNodes;
 float distanceFromTowerToEnemy;
+
+int Points; 
+Shop shopSelection; 
+std::string ShopSelectionText; 
+ShopPrices shopPrices; 
+bool isInShop; 
+
+int Health;
+
+int Wave;
+int NextWavePointReward; 
+int MinEnemiesToSpawn; 
+int MaxEnemiesToSpawn; 
 //------------------------------------------------------------------------
+
 
 //------------------------------------------------------------------------
 // Called before first update. Do any initial setup here.
 //------------------------------------------------------------------------
 void Init()
 {
-	//------------------------------------------------------------------------
-	// Example Sprite Code....
-	InEditorMode = false; 
-	CanDrawLine = false;
-	hasNodePoint1 = false; 
-	hasNodePoint2 = false; 
+	gameState = GameState::NOTPLAYING;
+
+	Wave = 0;
+	NextWavePointReward = 0;
+	MinEnemiesToSpawn = 1;
+	MaxEnemiesToSpawn = 10; 
+
+	Points = 1500;
+	Health = 500;
+	isInShop = false; 
+	shopSelection = Shop::NONE;
+	ShopSelectionText = "NONE";
+	shopPrices.BasicShipPrice = 250;
+	shopPrices.BrawlerShipPrice = 500; 
+	shopPrices.SniperShipPrice = 1000;
+	shopPrices.HealthPotion = 2000;
 
 	LineNodesSX.push_back(1100);
 	LineNodesSY.push_back(50);
@@ -81,140 +128,255 @@ void Init()
 //------------------------------------------------------------------------
 void Update(float deltaTime)
 {
-	if (App::IsKeyPressed('E')) {
-		if (!InEditorMode) {
-			InEditorMode = true;
-		}
-
-		else {
-			InEditorMode = false; 
-		}
-	}
-
-	if (App::IsKeyPressed(VK_LBUTTON) && InEditorMode) {
-		float mousePosx, mousePosy;
-		App::GetMousePos(mousePosx, mousePosy);
-
-		BrawlerSpaceShip* newTower = new BrawlerSpaceShip(); 
-		newTower->SetPosition(mousePosx, mousePosy);
-
-		towerList.push_back(newTower);
-	}
-
-	//------------------------------------------------------------------------
-	// Sample Sound.
-	//------------------------------------------------------------------------
-	if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
-	{
-		App::PlaySound(".\\TestData\\Test.wav");
-	}
-
-	if (!towerList.empty()) {
-		for (auto tower : towerList) {
-			tower->Update(deltaTime); 
-		}
-	}
-
-	if (!enemyList.empty()) {
-
-		for (auto enemy : enemyList) {
-			if (enemy->GetEnemyHealth() <= 0.0f) {
-				enemyList.erase(std::remove(enemyList.begin(), enemyList.end(), enemy), enemyList.end());
+	switch (gameState) {
+	case GameState::NOTPLAYING: {
+		if (!enemyList.empty()) {
+			for (auto enemy : enemyList) {
 				enemy->OnDestroy();
 				delete enemy;
-				enemy = nullptr;
+				enemy = nullptr;			
+			}
+
+			enemyList.clear();
+		}
+
+		if (!towerList.empty()) {
+			for (auto tower : towerList) {
+				tower->OnDestroy();
+				delete tower;
+				tower = nullptr;
+			}
+
+			towerList.clear();
+		}
+
+		if (App::IsKeyPressed('P')) {
+			gameState = GameState::ISPLAYING;
+			Health = 500; 
+			Points = 1500; 
+			Wave = 0;
+			NextWavePointReward = 0;
+
+			MinEnemiesToSpawn = 1;
+			MaxEnemiesToSpawn = 10;
+		}
+
+		break;
+	}
+
+	case GameState::ISPLAYING: {
+		if (App::IsKeyPressed('M')) {
+			if (!isInShop) {
+				isInShop = true;
 			}
 
 			else {
-				enemy->Update(deltaTime);
+				isInShop = false;
+			}
+		}
 
-				float enemyPosX, enemyPosY;
-				enemy->GetPosition(enemyPosX, enemyPosY);
+		if (App::IsKeyPressed('1') && isInShop) {
+			shopSelection = Shop::BASICSHIP;
+			ShopSelectionText = "BasicShip";
+		}
 
-				float positionX = LineNodesEX[enemy->GetEnemyMoveIndex()] - enemyPosX;
-				float positionY = LineNodesEY[enemy->GetEnemyMoveIndex()] - enemyPosY;
-				distanceFromNodes = sqrt(positionX * positionX + positionY * positionY);
+		else if (App::IsKeyPressed('2') && isInShop) {
+			shopSelection = Shop::BRAWLERSHIP;
+			ShopSelectionText = "BrawlerShip";
+		}
 
-				enemy->SetPosition(enemyPosX + positionX / distanceFromNodes * enemy->GetEnemySpeed(), enemyPosY + positionY / distanceFromNodes * enemy->GetEnemySpeed());
+		else if (App::IsKeyPressed('3') && isInShop) {
+			shopSelection = Shop::SNIPERSHIP;
+			ShopSelectionText = "SniperShip";
+		}
 
-				if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() < 4) {
-					enemy->SetEnemyMoveIndex(enemy->GetEnemyMoveIndex() + 1);
+		else if (App::IsKeyPressed('4') && isInShop) {
+			shopSelection = Shop::HEALTHPOTION;
+			ShopSelectionText = "Health Potion";
+		}
+
+		if (App::IsKeyPressed(VK_LBUTTON) && isInShop && shopSelection != Shop::NONE) {
+			float mousePosx, mousePosy;
+			App::GetMousePos(mousePosx, mousePosy);
+
+			switch (shopSelection) {
+				case Shop::BASICSHIP: {
+					if (Points >= shopPrices.BasicShipPrice) {
+						BasicSpaceShip* basicTower = new BasicSpaceShip();
+						basicTower->SetPosition(mousePosx, mousePosy);
+						towerList.push_back(basicTower);
+
+						Points -= shopPrices.BasicShipPrice;
+					}
+
+					break;
 				}
 
-				else if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() == 4) {
-					OutputDebugStringA("\nEnemy is at the end!");
+				case Shop::BRAWLERSHIP: {
+					if (Points >= shopPrices.BrawlerShipPrice) {
+						BrawlerSpaceShip* brawlerTower = new BrawlerSpaceShip();
+						brawlerTower->SetPosition(mousePosx, mousePosy);
+						towerList.push_back(brawlerTower);
+
+						Points -= shopPrices.BrawlerShipPrice;
+					}
+
+					break;
+				}
+
+				case Shop::SNIPERSHIP: {
+					if (Points >= shopPrices.SniperShipPrice) {
+						SniperSpaceShip* sniperTower = new SniperSpaceShip();
+						sniperTower->SetPosition(mousePosx, mousePosy);
+						towerList.push_back(sniperTower);
+
+						Points -= shopPrices.SniperShipPrice;
+					}
+
+					break;
+				}
+
+				case Shop::HEALTHPOTION: {
+					if (Points >= shopPrices.HealthPotion) {
+						Points -= shopPrices.HealthPotion;
+						Health += 150.0f; 
+					}
+
+					break;
+				}
+
+				default: {
+					break;
+				}
+			}
+		}
+
+		//------------------------------------------------------------------------
+		// Sample Sound.
+		//------------------------------------------------------------------------
+		if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
+		{
+			App::PlaySound(".\\TestData\\Test.wav");
+		}
+
+		if (!towerList.empty()) {
+			for (auto tower : towerList) {
+				tower->Update(deltaTime);
+			}
+		}
+
+		if (!enemyList.empty()) {
+
+			for (auto enemy : enemyList) {
+				if (enemy->GetEnemyHealth() <= 0.0f) {
+					Points += enemy->CollectPointsReward();
 					enemyList.erase(std::remove(enemyList.begin(), enemyList.end(), enemy), enemyList.end());
 					enemy->OnDestroy();
 					delete enemy;
 					enemy = nullptr;
 				}
 
-				if (enemy != nullptr) {
-					if (!towerList.empty()) {
-						for (auto tower : towerList) {
-							float towerPosX, towerPosY;
-							tower->GetPosition(towerPosX, towerPosY);
+				else {
+					enemy->Update(deltaTime);
 
-							float positionXTowerFromEnemy = towerPosX - enemyPosX;
-							float positionYTowerFromEnemy = towerPosY - enemyPosY;
+					float enemyPosX, enemyPosY;
+					enemy->GetPosition(enemyPosX, enemyPosY);
 
-							distanceFromTowerToEnemy = sqrt(positionXTowerFromEnemy * positionXTowerFromEnemy
-								+ positionYTowerFromEnemy * positionYTowerFromEnemy);
-							
-							if (distanceFromTowerToEnemy < tower->GetRange()) {
-								float tempSprite1PositionX, tempSprite1PositionY;
-								enemy->GetPosition(tempSprite1PositionX, tempSprite1PositionY);
+					float positionX = LineNodesEX[enemy->GetEnemyMoveIndex()] - enemyPosX;
+					float positionY = LineNodesEY[enemy->GetEnemyMoveIndex()] - enemyPosY;
+					distanceFromNodes = sqrt(positionX * positionX + positionY * positionY);
 
-								float tempSprite2PositionX, tempSprite2PositionY;
-								tower->GetPosition(tempSprite2PositionX, tempSprite2PositionY);
+					enemy->SetPosition(enemyPosX + positionX / distanceFromNodes * enemy->GetEnemySpeed(), enemyPosY + positionY / distanceFromNodes * enemy->GetEnemySpeed());
 
-								double directionX = tempSprite1PositionX - tempSprite2PositionX;
-								double directionY = tempSprite1PositionY - tempSprite2PositionY;
+					if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() < 4) {
+						enemy->SetEnemyMoveIndex(enemy->GetEnemyMoveIndex() + 1);
+					}
 
-								float newAngle = atan2(directionX, directionY);
+					else if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() == 4) {
+						Health -= enemy->GetEnemyHealth();
+						if (Health <= 0) {
+							gameState = GameState::NOTPLAYING;
+						}
 
-								tower->SetAngle(-newAngle);
-								tower->AttackClosestEnemy(enemy);
+						enemyList.erase(std::remove(enemyList.begin(), enemyList.end(), enemy), enemyList.end());
+						enemy->OnDestroy();
+						delete enemy;
+						enemy = nullptr;
+					}
+
+					if (enemy != nullptr) {
+						if (!towerList.empty()) {
+							for (auto tower : towerList) {
+								float towerPosX, towerPosY;
+								tower->GetPosition(towerPosX, towerPosY);
+
+								float positionXTowerFromEnemy = towerPosX - enemyPosX;
+								float positionYTowerFromEnemy = towerPosY - enemyPosY;
+
+								distanceFromTowerToEnemy = sqrt(positionXTowerFromEnemy * positionXTowerFromEnemy
+									+ positionYTowerFromEnemy * positionYTowerFromEnemy);
+
+								if (distanceFromTowerToEnemy < tower->GetRange()) {
+									float tempSprite1PositionX, tempSprite1PositionY;
+									enemy->GetPosition(tempSprite1PositionX, tempSprite1PositionY);
+
+									float tempSprite2PositionX, tempSprite2PositionY;
+									tower->GetPosition(tempSprite2PositionX, tempSprite2PositionY);
+
+									double directionX = tempSprite1PositionX - tempSprite2PositionX;
+									double directionY = tempSprite1PositionY - tempSprite2PositionY;
+
+									float newAngle = atan2(directionX, directionY);
+
+									tower->SetAngle(-newAngle);
+									tower->AttackClosestEnemy(enemy);
+								}
 							}
 						}
 					}
 				}
 			}
 		}
-	}
 
-	else if (enemyList.empty()) {
-		int amountOfEnemiesToSpawn = std::rand() % 10 + 1;
-		for (int i = 0; i < amountOfEnemiesToSpawn; i++) {
-			int EnemyClassToSpawn = std::rand() % 3; 
-			switch (EnemyClassToSpawn) {
-				default: {
-					break;
-				}
+		else if (enemyList.empty()) {
+			int amountOfEnemiesToSpawn = std::rand() % MaxEnemiesToSpawn + MinEnemiesToSpawn;
 
-				case 0: {
-					enemyDwarf = new Dwarf();
-					enemyList.push_back(enemyDwarf);
-					break;
-				}
+			Points += NextWavePointReward;
+			Wave += 1;
+			NextWavePointReward += 250.0f; 
+			MinEnemiesToSpawn += 2;
+			MaxEnemiesToSpawn += 4;
+			for (int i = 0; i < amountOfEnemiesToSpawn; i++) {
+				int EnemyClassToSpawn = std::rand() % 3;
+				switch (EnemyClassToSpawn) {
+					case 0: {
+						enemyDwarf = new Dwarf();
+						enemyList.push_back(enemyDwarf);
+						break;
+					}
 
-				case 1: {
-					 enemyBalanced = new BalancedEnemy();
-					enemyList.push_back(enemyBalanced);
-					break;
-				}
+					case 1: {
+						enemyBalanced = new BalancedEnemy();
+						enemyList.push_back(enemyBalanced);
+						break;
+					}
 
-				case 2: {
-					enemyGiant = new Giant();
-					enemyList.push_back(enemyGiant);
-					break;
+					case 2: {
+						enemyGiant = new Giant();
+						enemyList.push_back(enemyGiant);
+						break;
+					}
+
+					default: {
+						break;
+					}
 				}
 			}
-
-			std::string amountOfSpawnedEnemies = "Spawning " + std::to_string(amountOfEnemiesToSpawn) + " Enemies" + " \nOf Class:" + std::to_string(EnemyClassToSpawn);
-			OutputDebugStringA(amountOfSpawnedEnemies.c_str());
 		}
-	}
+
+		break;
+	} 
+  }
 }
 
 //------------------------------------------------------------------------
@@ -223,29 +385,10 @@ void Update(float deltaTime)
 //------------------------------------------------------------------------
 void Render()
 {	
-
-	//------------------------------------------------------------------------
-	// Example Line Drawing.
-	//------------------------------------------------------------------------
-	static float a = 0.0f;
 	float r = 1.0f;
 	float g = 1.0f;
 	float b = 1.0f;
-	a += 0.1f;
 
-	/*
-	for (int i = 0; i < 20; i++)
-	{
-
-		float sx = 200 + sinf(a + i * 0.1f)*60.0f;
-		float sy = 200 + cosf(a + i * 0.1f)*60.0f;
-		float ex = 700 - sinf(a + i * 0.1f)*60.0f;
-		float ey = 700 - cosf(a + i * 0.1f)*60.0f;
-		g = (float)i / 20.0f;
-		b = (float)i / 20.0f;
-		App::DrawLine(sx, sy, ex, ey,r,g,b);
-	}
-	*/
 	App::DrawLine(LineNodesSX[0], LineNodesSY[0], LineNodesEX[0], LineNodesEY[0], r, g, b);
 	App::DrawLine(LineNodesSX[1], LineNodesSY[1], LineNodesEX[1], LineNodesEY[1], r, g, b);
 	App::DrawLine(LineNodesSX[2], LineNodesSY[2], LineNodesEX[2], LineNodesEY[2], r, g, b);
@@ -265,22 +408,47 @@ void Render()
 	}
 	//------------------------------------------------------------------------
 
-	std::string distanceDebugging = "Distance = " + std::to_string(distanceFromNodes);
-	App::Print(0, 350, distanceDebugging.c_str());
-	App::Print(100, 100, "E - Editor Mode");
+	if (gameState == GameState::ISPLAYING) {
+		if (isInShop) {
+			std::string ShopTitle = "SHOP";
+			App::Print(700, 750, ShopTitle.c_str(), 0.0f, 1.0f, 0.0f);
 
-	std::string distanceDebugging2 = "Tower To Enemy Distance = " + std::to_string(distanceFromTowerToEnemy);
-	App::Print(0, 500, distanceDebugging2.c_str());
+			std::string ShopShipInfo1 = "1 - BasicShip (" + std::to_string(shopPrices.BasicShipPrice) + " points)";
+			App::Print(700, 730, ShopShipInfo1.c_str());
 
+			std::string ShopShipInfo2 = "2 - BrawlerShip (" + std::to_string(shopPrices.BrawlerShipPrice) + " points)";
+			App::Print(700, 710, ShopShipInfo2.c_str());
 
-	float x, y;
-	App::GetMousePos(x, y);
-	std::string MousePos = "Mouse Position " + std::to_string(x) + ", " + std::to_string(y);
-	App::Print(0, 0, MousePos.c_str());
+			std::string ShopShipInfo3 = "3 - SniperShip (" + std::to_string(shopPrices.SniperShipPrice) + " points)";
+			App::Print(700, 690, ShopShipInfo3.c_str());
 
-	if (InEditorMode) {
-		App::Print(650, 100, "Note: Left Click to add the first Node point!");
-		App::Print(650,  50, "Right Click to add the second Node point!");
+			std::string ShopShipInfo4 = "4 - Health Potion (" + std::to_string(shopPrices.HealthPotion) + " points)";
+			App::Print(700, 670, ShopShipInfo4.c_str());
+
+			std::string CurrentlySelected = "Currently Selected: " + ShopSelectionText;
+			App::Print(700, 630, CurrentlySelected.c_str());
+
+			std::string UsefulInfoOne = "Use the numbers on your Keyboard to Select";
+			App::Print(640, 580, UsefulInfoOne.c_str());
+
+			std::string UsefulInfoTwo = "Left Click to Buy/Place tower or item";
+			App::Print(660, 560, UsefulInfoTwo.c_str());
+		}
+
+		std::string PointsInfo = "Points: " + std::to_string(Points);
+		App::Print(50, 750, PointsInfo.c_str(), r, g, b);
+
+		std::string HealthInfo = "Health: " + std::to_string(Health);
+		App::Print(495, 750, HealthInfo.c_str(), r, g, b);
+
+		std::string WaveInfo = "Wave: " + std::to_string(Wave);
+		App::Print(500, 730, WaveInfo.c_str(), r, g, b);
+
+		App::Print(50, 200, "M - Shop");
+	}
+
+	else if (gameState == GameState::NOTPLAYING) {
+		App::Print(100, 120, "P - Play");
 	}
 }
 //------------------------------------------------------------------------

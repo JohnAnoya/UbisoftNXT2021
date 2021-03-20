@@ -15,8 +15,6 @@ public:
 	void SetPosition(float x_, float y_) override;
 	void SetAngle(float newAngle_) override;
 
-	void TowerDestroyRemainingBullets() override;
-
 	void GetPosition(float& x, float& y) override;
 	void AttackClosestEnemy(Enemy* enemy_) override;
 	float GetRange() override;
@@ -27,8 +25,7 @@ private:
 	float createNewBulletsTick; 
 	float defaultShootingWaitTime;
 	int fireRate; 
-	bool isShooting; 
-	
+
 	std::vector<Bullet*> EnemyBullets; 
 };
 #endif 

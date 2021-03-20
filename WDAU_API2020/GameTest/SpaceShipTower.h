@@ -14,8 +14,6 @@ public:
 	virtual void SetPosition(float x_, float y_) = 0;
 	virtual void SetAngle(float newAngle_) = 0;
 
-	virtual void TowerDestroyRemainingBullets() = 0;
-
 	virtual void GetPosition(float& x, float& y) = 0;
 	virtual void AttackClosestEnemy(Enemy* enemy_) = 0;
 	virtual float GetRange() = 0; 

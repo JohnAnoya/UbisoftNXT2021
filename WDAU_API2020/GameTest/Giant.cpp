@@ -11,6 +11,8 @@ Giant::Giant() : Enemy() {
 	EnemyMoveIndex = 0;
 	health = 200.0f;
 	speed = 0.75f;
+
+	PointsReward = 500;
 }
 
 Giant::~Giant() {
@@ -31,6 +33,10 @@ float Giant::GetEnemyHealth() {
 
 float Giant::GetEnemySpeed() {
 	return speed;
+}
+
+int Giant::CollectPointsReward() {
+	return PointsReward;
 }
 
 void Giant::SetEnemyMoveIndex(int newIndex_) {

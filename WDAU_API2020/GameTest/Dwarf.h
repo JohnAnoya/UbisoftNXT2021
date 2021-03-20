@@ -20,12 +20,16 @@ public:
 	int GetEnemyMoveIndex() override;
 	float GetEnemyHealth() override;
 	float GetEnemySpeed() override;
+
+	int CollectPointsReward() override;
 private: 
 	int EnemyMoveIndex; 
 	int EnemyHealthPrintOffsetX = 25;
 	int EnemyHealthPrintOffsetY = 50;
 	float health; 
 	float speed; 
+
+	int PointsReward;
 
 	CSimpleSprite* enemySprite; 
 };

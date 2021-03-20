@@ -9,8 +9,8 @@ BasicSpaceShip::BasicSpaceShip() : SpaceShipTower() {
 	TowerRange = 200.0f; 
 	fireRate = 3; 
 	bulletCurrentLifeTime = 0.0f;
-	defaultShootingWaitTime = 10.0f;
-	isShooting = false; 
+	createNewBulletsTick = 0.0f;
+	defaultShootingWaitTime = 5.0f; 
 }
 
 BasicSpaceShip::~BasicSpaceShip() {
@@ -19,6 +19,7 @@ BasicSpaceShip::~BasicSpaceShip() {
 
 void BasicSpaceShip::Update(float deltaTime_) {
 	towerSprite->Update(deltaTime_);
+	createNewBulletsTick += 0.1f;
 
 	if (!EnemyBullets.empty()) {
 		for (auto bullet : EnemyBullets) {
@@ -78,20 +79,11 @@ float BasicSpaceShip::GetRange() {
 	return TowerRange;
 }
 
-void BasicSpaceShip::TowerDestroyRemainingBullets() {
-	if (!EnemyBullets.empty()) {
-		for (auto bullet : EnemyBullets) {
-			EnemyBullets.erase(std::remove(EnemyBullets.begin(), EnemyBullets.end(), bullet), EnemyBullets.end());
-			bullet->OnDestroy();
-			delete bullet;
-			bullet = nullptr;
-		}
-	}
-}
-
 void BasicSpaceShip::AttackClosestEnemy(Enemy* enemy_) {
 	if (enemy_ != nullptr) {
-		createNewBulletsTick += 0.1f;
+		std::string bulletCurrentLifeTimeDebug = "\nCurrent New Bullet Tick: " + std::to_string(createNewBulletsTick);
+		OutputDebugStringA(bulletCurrentLifeTimeDebug.c_str());
+
 		if (EnemyBullets.empty() && createNewBulletsTick > defaultShootingWaitTime) {
 			int AmountOfBulletsToFire = std::rand() % fireRate + 1;
 
@@ -131,9 +123,6 @@ void BasicSpaceShip::AttackClosestEnemy(Enemy* enemy_) {
 						* bullet->GetBulletSpeed(), bulletPosY + positionYBulletFromEnemy / distanceFromEnemy
 						* bullet->GetBulletSpeed());
 					
-					std::string bulletCurrentLifeTimeDebug = "\nCurrent Bullet Life Time: " + std::to_string(bulletCurrentLifeTime);
-					OutputDebugStringA(bulletCurrentLifeTimeDebug.c_str());
-
 					if (distanceFromEnemy < 50.0f) {
 						enemy_->SetEnemyHealth(enemy_->GetEnemyHealth() - bullet->GetBulletDamage());
 
@@ -143,7 +132,7 @@ void BasicSpaceShip::AttackClosestEnemy(Enemy* enemy_) {
 						bullet = nullptr;
 
 						bulletCurrentLifeTime = 0.0f;
-						createNewBulletsTick = 0.0f; 
+						createNewBulletsTick = 0.0f;
 					}
 				}
 			}

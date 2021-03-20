@@ -11,6 +11,8 @@ BalancedEnemy::BalancedEnemy() : Enemy() {
 	EnemyMoveIndex = 0;
 	health = 100.0f;
 	speed = 1.5f;
+
+	PointsReward = 300;
 }
 
 BalancedEnemy::~BalancedEnemy() {
@@ -31,6 +33,10 @@ float BalancedEnemy::GetEnemyHealth() {
 
 float BalancedEnemy::GetEnemySpeed() {
 	return speed;
+}
+
+int BalancedEnemy::CollectPointsReward() {
+	return PointsReward;
 }
 
 void BalancedEnemy::SetEnemyMoveIndex(int newIndex_) {

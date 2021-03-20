@@ -9,8 +9,8 @@ BrawlerSpaceShip::BrawlerSpaceShip() : SpaceShipTower() {
 	TowerRange = 150.0f;
 	fireRate = 1;
 	bulletCurrentLifeTime = 0.0f;
-	defaultShootingWaitTime = 2.0f;
-	isShooting = false;
+	createNewBulletsTick = 0.0f; 
+	defaultShootingWaitTime = 1.0f;
 }
 
 BrawlerSpaceShip::~BrawlerSpaceShip() {
@@ -19,6 +19,7 @@ BrawlerSpaceShip::~BrawlerSpaceShip() {
 
 void BrawlerSpaceShip::Update(float deltaTime_) {
 	towerSprite->Update(deltaTime_);
+	createNewBulletsTick += 0.1f;
 
 	if (!EnemyBullets.empty()) {
 		for (auto bullet : EnemyBullets) {
@@ -78,20 +79,8 @@ float BrawlerSpaceShip::GetRange() {
 	return TowerRange;
 }
 
-void BrawlerSpaceShip::TowerDestroyRemainingBullets() {
-	if (!EnemyBullets.empty()) {
-		for (auto bullet : EnemyBullets) {
-			EnemyBullets.erase(std::remove(EnemyBullets.begin(), EnemyBullets.end(), bullet), EnemyBullets.end());
-			bullet->OnDestroy();
-			delete bullet;
-			bullet = nullptr;
-		}
-	}
-}
-
 void BrawlerSpaceShip::AttackClosestEnemy(Enemy* enemy_) {
 	if (enemy_ != nullptr) {
-		createNewBulletsTick += 0.1f;
 		if (EnemyBullets.empty() && createNewBulletsTick > defaultShootingWaitTime) {
 			int AmountOfBulletsToFire = fireRate;
 

@@ -26,5 +26,7 @@ public:
 	virtual int GetEnemyMoveIndex() = 0;
 	virtual float GetEnemyHealth() = 0;
 	virtual float GetEnemySpeed() = 0;
+
+	virtual int CollectPointsReward() = 0;
 };
 #endif

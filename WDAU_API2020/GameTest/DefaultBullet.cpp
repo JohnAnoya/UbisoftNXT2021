@@ -7,8 +7,8 @@ DefaultBullet::DefaultBullet() : Bullet() {
 	bulletSprite->SetFrame(3);
 	bulletSprite->SetScale(0.75f);
 
-	bulletSpeed = 1.2f; 
-	bulletDamage = 5.0f; 
+	bulletSpeed = 1.5f; 
+	bulletDamage = 10.0f; 
 	lifeTime = 15.0f; 
 }
 
