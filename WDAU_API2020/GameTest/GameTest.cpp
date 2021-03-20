@@ -9,14 +9,16 @@
 //------------------------------------------------------------------------
 #include "app\app.h"
 #include "Dwarf.h"
+#include "BalancedEnemy.h"
+#include "Giant.h"
+#include "BasicSpaceShip.h"
 //------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
 // Eample data....
 //------------------------------------------------------------------------
-CSimpleSprite *testSprite2;
-
 std::vector<Enemy*> enemyList; 
+std::vector<SpaceShipTower*> towerList;
 
 bool InEditorMode, hasNodePoint1, hasNodePoint2, CanDrawLine;
 std::vector<int> LineNodesSX; 
@@ -24,8 +26,9 @@ std::vector<int> LineNodesSY;
 std::vector<int> LineNodesEX;
 std::vector<int> LineNodesEY;
 
-bool EnemyIsMoving = false;
-float distance;
+bool SpawnEnemies; 
+float distanceFromNodes;
+float distanceFromTowerToEnemy;
 //------------------------------------------------------------------------
 
 //------------------------------------------------------------------------
@@ -64,14 +67,6 @@ void Init()
 	LineNodesSY.push_back(600);
 	LineNodesEX.push_back(100);
 	LineNodesEY.push_back(600);
-
-	Dwarf* dwarfEnemy = new Dwarf();
-	enemyList.push_back(dwarfEnemy);
-
-	testSprite2 = App::CreateSprite(".\\TestData\\Ships.bmp", 2, 12);
-	testSprite2->SetPosition(400.0f, 400.0f);	
-	testSprite2->SetFrame(2);
-	testSprite2->SetScale(1.0f);
 	//------------------------------------------------------------------------
 }
 
@@ -81,10 +76,6 @@ void Init()
 //------------------------------------------------------------------------
 void Update(float deltaTime)
 {
-	//------------------------------------------------------------------------
-	// Example Sprite Code....
-	testSprite2->Update(deltaTime);
-
 	if (App::IsKeyPressed('E')) {
 		if (!InEditorMode) {
 			InEditorMode = true;
@@ -96,54 +87,14 @@ void Update(float deltaTime)
 	}
 
 	if (App::IsKeyPressed(VK_LBUTTON) && InEditorMode) {
-		if (!hasNodePoint1) {
-			hasNodePoint1 = true; 
+		float mousePosx, mousePosy;
+		App::GetMousePos(mousePosx, mousePosy);
 
-			float mousePosx, mousePosy;
-			App::GetMousePos(mousePosx, mousePosy);
+		BasicSpaceShip* newTower = new BasicSpaceShip(); 
+		newTower->SetPosition(mousePosx, mousePosy);
 
-
-		}
+		towerList.push_back(newTower);
 	}
-
-	if (App::IsKeyPressed(VK_RBUTTON) && InEditorMode) {
-		if (hasNodePoint1 && !hasNodePoint2) {
-			hasNodePoint2 = true;
-
-			float mousePosx, mousePosy;
-			App::GetMousePos(mousePosx, mousePosy);
-
-\
-
-			hasNodePoint1 = false; 
-			hasNodePoint2 = false; 
-		}
-	}
-
-	/*if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_UP, false))
-	{
-		//testSprite->SetScale(testSprite->GetScale() + 0.1f);
-	}
-	if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_DOWN, false))
-	{
-		testSprite->SetScale(testSprite->GetScale() - 0.1f);
-	}
-	if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_LEFT, false))
-	{
-		testSprite->SetAngle(testSprite->GetAngle() + 0.1f);
-	}
-	if (App::GetController().CheckButton(XINPUT_GAMEPAD_DPAD_RIGHT, false))
-	{
-		testSprite->SetAngle(testSprite->GetAngle() - 0.1f);
-	}
-	if (App::GetController().CheckButton(XINPUT_GAMEPAD_A, true))
-	{
-		testSprite->SetAnimation(-1);
-	}
-	if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
-	{
-		testSprite->SetVertex(0, testSprite->GetVertex(0) + 5.0f);
-	}*/ 
 
 	//------------------------------------------------------------------------
 	// Sample Sound.
@@ -151,6 +102,12 @@ void Update(float deltaTime)
 	if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
 	{
 		App::PlaySound(".\\TestData\\Test.wav");
+	}
+
+	if (!towerList.empty()) {
+		for (auto tower : towerList) {
+			tower->Update(deltaTime); 
+		}
 	}
 
 	if (!enemyList.empty()) {
@@ -165,32 +122,85 @@ void Update(float deltaTime)
 
 			float positionX = LineNodesEX[enemy->GetEnemyMoveIndex()] - enemyPosX;
 			float positionY = LineNodesEY[enemy->GetEnemyMoveIndex()] - enemyPosY;
-			distance = sqrt(positionX * positionX + positionY * positionY);
+			distanceFromNodes = sqrt(positionX * positionX + positionY * positionY);
 
-			enemy->SetPosition(enemyPosX + positionX / distance * 3.0f, enemyPosY + positionY / distance * 3.0f);
+			enemy->SetPosition(enemyPosX + positionX / distanceFromNodes * enemy->GetEnemySpeed(), enemyPosY + positionY / distanceFromNodes * enemy->GetEnemySpeed());
 
-			if (distance < 2.0f && enemy->GetEnemyMoveIndex() < 4) {
+			if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() < 4) {
 				enemy->SetEnemyMoveIndex(enemy->GetEnemyMoveIndex() + 1);
 			}
 
-			float tempSprite1PositionX, tempSprite1PositionY;
-			enemy->GetPosition(tempSprite1PositionX, tempSprite1PositionY);
+			else if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() == 4) {
+				OutputDebugStringA("\nEnemy is at the end!");
+				enemyList.erase(std::remove(enemyList.begin(), enemyList.end(), enemy), enemyList.end());
+				enemy->OnDestroy(); 
+				delete enemy;
+				enemy = nullptr; 
+			}
 
-			float tempSprite2PositionX, tempSprite2PositionY;
-			testSprite2->GetPosition(tempSprite2PositionX, tempSprite2PositionY);
+			if (enemy != nullptr) {
+				if (!towerList.empty()) {
+					for (auto tower : towerList) {
+						float towerPosX, towerPosY;
+						tower->GetPosition(towerPosX, towerPosY);
 
-			double directionX = tempSprite1PositionX - tempSprite2PositionX;
-			double directionY = tempSprite1PositionY - tempSprite2PositionY;
+						float positionXTowerFromEnemy = towerPosX - enemyPosX;
+						float positionYTowerFromEnemy = towerPosY - enemyPosY;
 
-			float newAngle = atan2(directionX, directionY);
+					    distanceFromTowerToEnemy = sqrt(positionXTowerFromEnemy * positionXTowerFromEnemy 
+							+ positionYTowerFromEnemy * positionYTowerFromEnemy);
+						if (distanceFromTowerToEnemy < tower->GetRange()) {
+							float tempSprite1PositionX, tempSprite1PositionY;
+							enemy->GetPosition(tempSprite1PositionX, tempSprite1PositionY);
+
+							float tempSprite2PositionX, tempSprite2PositionY;
+							tower->GetPosition(tempSprite2PositionX, tempSprite2PositionY);
+
+							double directionX = tempSprite1PositionX - tempSprite2PositionX;
+							double directionY = tempSprite1PositionY - tempSprite2PositionY;
+
+							float newAngle = atan2(directionX, directionY);
 
 
-			testSprite2->SetAngle(-newAngle);
+							tower->SetAngle(-newAngle);
+						}
+					}
+				}				
+			}
 		}
 	}
 
 	else if (enemyList.empty()) {
-		
+		int amountOfEnemiesToSpawn = std::rand() % 10 + 1;
+		for (int i = 0; i < amountOfEnemiesToSpawn; i++) {
+			int EnemyClassToSpawn = std::rand() % 3; 
+			switch (EnemyClassToSpawn) {
+				default: {
+					break;
+				}
+
+				case 0: {
+					Dwarf* enemy = new Dwarf();
+					enemyList.push_back(enemy);
+					break;
+				}
+
+				case 1: {
+					BalancedEnemy* enemy = new BalancedEnemy();
+					enemyList.push_back(enemy);
+					break;
+				}
+
+				case 2: {
+					Giant* enemy = new Giant();
+					enemyList.push_back(enemy);
+					break;
+				}
+			}
+
+			std::string amountOfSpawnedEnemies = "Spawning " + std::to_string(amountOfEnemiesToSpawn) + " Enemies" + " \nOf Class:" + std::to_string(EnemyClassToSpawn);
+			OutputDebugStringA(amountOfSpawnedEnemies.c_str());
+		}
 	}
 }
 
@@ -229,20 +239,26 @@ void Render()
 	App::DrawLine(LineNodesSX[3], LineNodesSY[3], LineNodesEX[3], LineNodesEY[3], r, g, b);
 	App::DrawLine(LineNodesSX[4], LineNodesSY[4], LineNodesEX[4], LineNodesEY[4], r, g, b);
 
-	//------------------------------------------------------------------------
-	// Example Sprite Code....
+	if (!towerList.empty()) {
+		for (auto tower : towerList) {
+			tower->Render(); 
+		}
+	}
+
 	if (!enemyList.empty()) {
 		for (auto enemy : enemyList) {
 			enemy->Render();
 		}
 	}
-
-	testSprite2->Draw();
 	//------------------------------------------------------------------------
 
-	std::string distanceDebugging = "Distance = " + std::to_string(distance);
+	std::string distanceDebugging = "Distance = " + std::to_string(distanceFromNodes);
 	App::Print(0, 350, distanceDebugging.c_str());
 	App::Print(100, 100, "E - Editor Mode");
+
+	std::string distanceDebugging2 = "Tower To Enemy Distance = " + std::to_string(distanceFromTowerToEnemy);
+	App::Print(0, 500, distanceDebugging2.c_str());
+
 
 	float x, y;
 	App::GetMousePos(x, y);
@@ -265,8 +281,15 @@ void Shutdown()
 	if (!enemyList.empty()) {
 		for (auto enemy : enemyList) {
 			delete enemy; 
+			enemy = nullptr; 
 		}
 	}
-	delete testSprite2;
+
+	if (!towerList.empty()) {
+		for (auto tower : towerList) {
+			delete tower; 
+			tower = nullptr; 
+		}
+	}
 	//------------------------------------------------------------------------
 }

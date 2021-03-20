@@ -183,8 +183,12 @@
     <ClInclude Include="App\SimpleSound.h" />
     <ClInclude Include="App\SimpleSprite.h" />
     <ClInclude Include="App\TextureLoader.h" />
+    <ClInclude Include="BalancedEnemy.h" />
+    <ClInclude Include="BasicSpaceShip.h" />
     <ClInclude Include="Dwarf.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Giant.h" />
+    <ClInclude Include="SpaceShipTower.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -195,8 +199,11 @@
     <ClCompile Include="App\SimpleSound.cpp" />
     <ClCompile Include="App\SimpleSprite.cpp" />
     <ClCompile Include="App\TextureLoader.cpp" />
+    <ClCompile Include="BalancedEnemy.cpp" />
+    <ClCompile Include="BasicSpaceShip.cpp" />
     <ClCompile Include="Dwarf.cpp" />
     <ClCompile Include="GameTest.cpp" />
+    <ClCompile Include="Giant.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

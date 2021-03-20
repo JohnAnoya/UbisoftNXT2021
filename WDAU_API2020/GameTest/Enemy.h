@@ -20,8 +20,11 @@ public:
 
 	virtual void SetPosition(float x_, float y_) = 0;
 	virtual void SetEnemyMoveIndex(int newIndex_) = 0;
+	virtual void SetEnemyHealth(float newHealth_) = 0;
 
 	virtual void GetPosition(float& x, float& y) = 0;
 	virtual int GetEnemyMoveIndex() = 0;
+	virtual float GetEnemyHealth() = 0;
+	virtual float GetEnemySpeed() = 0;
 };
 #endif

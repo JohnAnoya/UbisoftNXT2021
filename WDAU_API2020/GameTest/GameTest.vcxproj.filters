@@ -24,6 +24,9 @@
       <Filter>API</Filter>
     </ClCompile>
     <ClCompile Include="Dwarf.cpp" />
+    <ClCompile Include="BalancedEnemy.cpp" />
+    <ClCompile Include="Giant.cpp" />
+    <ClCompile Include="BasicSpaceShip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App\app.h">
@@ -55,6 +58,10 @@
     </ClInclude>
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Dwarf.h" />
+    <ClInclude Include="BalancedEnemy.h" />
+    <ClInclude Include="Giant.h" />
+    <ClInclude Include="SpaceShipTower.h" />
+    <ClInclude Include="BasicSpaceShip.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
