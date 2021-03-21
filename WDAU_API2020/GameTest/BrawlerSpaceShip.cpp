@@ -10,7 +10,7 @@ BrawlerSpaceShip::BrawlerSpaceShip() : SpaceShipTower() {
 	fireRate = 1;
 	bulletCurrentLifeTime = 0.0f;
 	createNewBulletsTick = 0.0f; 
-	defaultShootingWaitTime = 1.0f;
+	defaultShootingWaitTime = 1.5f;
 }
 
 BrawlerSpaceShip::~BrawlerSpaceShip() {

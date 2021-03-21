@@ -18,8 +18,8 @@
 enum class Shop {
 	NONE,
 	BASICSHIP,
+	SNIPERSHIP,
 	BRAWLERSHIP,
-	SNIPERSHIP, 
 	HEALTHPOTION
 };
 
@@ -94,8 +94,8 @@ void Init()
 	shopSelection = Shop::NONE;
 	ShopSelectionText = "NONE";
 	shopPrices.BasicShipPrice = 250;
-	shopPrices.BrawlerShipPrice = 500; 
-	shopPrices.SniperShipPrice = 1000;
+	shopPrices.SniperShipPrice = 500;
+	shopPrices.BrawlerShipPrice = 1000; 
 	shopPrices.HealthPotion = 2000;
 
 	LineNodesSX.push_back(1100);
@@ -185,13 +185,13 @@ void Update(float deltaTime)
 		}
 
 		else if (App::IsKeyPressed('2') && isInShop) {
-			shopSelection = Shop::BRAWLERSHIP;
-			ShopSelectionText = "BrawlerShip";
+			shopSelection = Shop::SNIPERSHIP;
+			ShopSelectionText = "SniperShip";
 		}
 
 		else if (App::IsKeyPressed('3') && isInShop) {
-			shopSelection = Shop::SNIPERSHIP;
-			ShopSelectionText = "SniperShip";
+			shopSelection = Shop::BRAWLERSHIP;
+			ShopSelectionText = "BrawlerShip";
 		}
 
 		else if (App::IsKeyPressed('4') && isInShop) {
@@ -216,18 +216,6 @@ void Update(float deltaTime)
 					break;
 				}
 
-				case Shop::BRAWLERSHIP: {
-					if (Points >= shopPrices.BrawlerShipPrice) {
-						BrawlerSpaceShip* brawlerTower = new BrawlerSpaceShip();
-						brawlerTower->SetPosition(mousePosx, mousePosy);
-						towerList.push_back(brawlerTower);
-
-						Points -= shopPrices.BrawlerShipPrice;
-					}
-
-					break;
-				}
-
 				case Shop::SNIPERSHIP: {
 					if (Points >= shopPrices.SniperShipPrice) {
 						SniperSpaceShip* sniperTower = new SniperSpaceShip();
@@ -235,6 +223,18 @@ void Update(float deltaTime)
 						towerList.push_back(sniperTower);
 
 						Points -= shopPrices.SniperShipPrice;
+					}
+
+					break;
+				}
+
+				case Shop::BRAWLERSHIP: {
+					if (Points >= shopPrices.BrawlerShipPrice) {
+						BrawlerSpaceShip* brawlerTower = new BrawlerSpaceShip();
+						brawlerTower->SetPosition(mousePosx, mousePosy);
+						towerList.push_back(brawlerTower);
+
+						Points -= shopPrices.BrawlerShipPrice;
 					}
 
 					break;
@@ -425,10 +425,10 @@ void Render()
 			std::string ShopShipInfo1 = "1 - BasicShip (" + std::to_string(shopPrices.BasicShipPrice) + " points)";
 			App::Print(700, 730, ShopShipInfo1.c_str());
 
-			std::string ShopShipInfo2 = "2 - BrawlerShip (" + std::to_string(shopPrices.BrawlerShipPrice) + " points)";
+			std::string ShopShipInfo2 = "2 - SniperShip (" + std::to_string(shopPrices.SniperShipPrice) + " points)";
 			App::Print(700, 710, ShopShipInfo2.c_str());
 
-			std::string ShopShipInfo3 = "3 - SniperShip (" + std::to_string(shopPrices.SniperShipPrice) + " points)";
+			std::string ShopShipInfo3 = "3 - BrawlerShip (" + std::to_string(shopPrices.BrawlerShipPrice) + " points)";
 			App::Print(700, 690, ShopShipInfo3.c_str());
 
 			std::string ShopShipInfo4 = "4 - Health Potion (" + std::to_string(shopPrices.HealthPotion) + " points)";

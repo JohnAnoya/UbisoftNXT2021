@@ -7,7 +7,7 @@ FastBullet::FastBullet() : Bullet() {
 	bulletSprite->SetFrame(11);
 	bulletSprite->SetScale(0.5f);
 
-	bulletSpeed = 2.5f;
+	bulletSpeed = 1.0f;
 	bulletDamage = 5.0f;
 	lifeTime = 10.0f;
 }
