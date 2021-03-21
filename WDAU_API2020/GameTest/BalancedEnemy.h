@@ -3,6 +3,7 @@
 #include "Enemy.h"
 #include <cmath>
 
+//Inheriting from the Enemy class 
 class BalancedEnemy : public Enemy
 {
 public:
@@ -12,7 +13,7 @@ public:
 	void Update(float deltaTime_) override;
 	void OnDestroy() override;
 
-	void SetPosition(float x_, float y_) override;
+	void SetPosition(float x_, float y_) override; 
 	void SetEnemyMoveIndex(int newIndex_) override;
 	void SetEnemyHealth(float newHealth_) override;
 

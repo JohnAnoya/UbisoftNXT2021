@@ -2,7 +2,7 @@
 #define ENEMY_H 
 
 #include "app\app.h"
-enum
+enum //Sprite Animation ENUM
 {
 	ANIM_FORWARDS,
 	ANIM_BACKWARDS,
@@ -10,6 +10,7 @@ enum
 	ANIM_RIGHT,
 };
 
+//This is an abstract parent header utilizing Polymorphism!  
 class Enemy {
 public: 
 	Enemy() {} 

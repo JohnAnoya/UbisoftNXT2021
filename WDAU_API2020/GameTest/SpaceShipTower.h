@@ -3,6 +3,7 @@
 #include "app\app.h"
 #include "Enemy.h"
 
+//This is an abstract parent header utilizing Polymorphism!  
 class SpaceShipTower {
 public: 
 	SpaceShipTower() {}
