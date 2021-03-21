@@ -106,34 +106,28 @@ void Init()
 	shopPrices.HealthPotion = 2000;
 
 	/*Initializing FIRST Line To Draw*/
-	LineNodesSX.push_back(1100);
-	LineNodesSY.push_back(50);
-	LineNodesEX.push_back(750);
-	LineNodesEY.push_back(50);
+	LineNodesSX.push_back(650);
+	LineNodesSY.push_back(0);
+	LineNodesEX.push_back(950);
+	LineNodesEY.push_back(100);
 
 	/*Initializing SECOND Line To Draw*/
-	LineNodesSX.push_back(750);
-	LineNodesSY.push_back(50);
-	LineNodesEX.push_back(750);
-	LineNodesEY.push_back(350);
+	LineNodesSX.push_back(950);
+	LineNodesSY.push_back(100);
+	LineNodesEX.push_back(500);
+	LineNodesEY.push_back(750);
 
 	/*Initializing THIRD Line To Draw*/
-	LineNodesSX.push_back(750);
-	LineNodesSY.push_back(350);
-	LineNodesEX.push_back(500);
-	LineNodesEY.push_back(350);
+	LineNodesSX.push_back(500);
+	LineNodesSY.push_back(750);
+	LineNodesEX.push_back(50);
+	LineNodesEY.push_back(100);
 
 	/*Initializing FOURTH Line To Draw*/
-	LineNodesSX.push_back(500);
-	LineNodesSY.push_back(350);
-	LineNodesEX.push_back(500);
-	LineNodesEY.push_back(600);
-
-	/*Initializing FIFTH Line To Draw*/
-	LineNodesSX.push_back(500);
-	LineNodesSY.push_back(600);
-	LineNodesEX.push_back(100);
-	LineNodesEY.push_back(600);
+	LineNodesSX.push_back(50);
+	LineNodesSY.push_back(100);
+	LineNodesEX.push_back(350);
+	LineNodesEY.push_back(0);
 }
 
 //------------------------------------------------------------------------
@@ -318,12 +312,12 @@ void Update(float deltaTime)
 
 					//Once the enemy reaches the end point of the current node increase the index 
 					//Doing this will allow the enemy to progress to the next line node
-					if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() < 4) {
+					if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() < 3) {
 						enemy->SetEnemyMoveIndex(enemy->GetEnemyMoveIndex() + 1);
 					}
 
 					//Otherwise if the enemy reaches the end without dying
-					else if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() == 4) {
+					else if (distanceFromNodes < 3.0f && enemy->GetEnemyMoveIndex() == 3) {
 						Health -= enemy->GetEnemyHealth(); //Subtract from the user's health with the enemy's remaining health
 						if (Health <= 0) { //If the user's health <= 0 then they lost 
 							gameState = GameState::NOTPLAYING; //switch the game state to NOTPLAYING
@@ -395,6 +389,8 @@ void Update(float deltaTime)
 						enemyDwarf = new Dwarf();
 						//Set the EnemyHealth in addition with the HealthIncreaseInterval(enemy health increases per wave)
 						enemyDwarf->SetEnemyHealth(enemyDwarf->GetEnemyHealth() + EnemyHealthIncreaseInterval);
+						enemyDwarf->SetPosition(rand() % (LineNodesSX[0] - (LineNodesSX[0] - 100) + 1)
+							+ (LineNodesSX[0] - 100), LineNodesSY[0]);
 						enemyList.push_back(enemyDwarf); //Push the enemy object into the EnemyList vector 
 						break;
 					}
@@ -402,7 +398,9 @@ void Update(float deltaTime)
 					case 1: { //If the EnemyClassToSpawn Variable equals 1, Spawn a Balanced Enemy
 						enemyBalanced = new BalancedEnemy();
 						//Set the EnemyHealth in addition with the HealthIncreaseInterval(enemy health increases per wave)
-						enemyBalanced ->SetEnemyHealth(enemyBalanced->GetEnemyHealth() + EnemyHealthIncreaseInterval);
+						enemyBalanced->SetEnemyHealth(enemyBalanced->GetEnemyHealth() + EnemyHealthIncreaseInterval);
+						enemyBalanced->SetPosition(rand() % (LineNodesSX[0] - (LineNodesSX[0] - 100) + 1) 
+							+ (LineNodesSX[0] - 100), LineNodesSY[0]); //'Randomize' the position so the enemies don't spawn on top of eachother! 
 						enemyList.push_back(enemyBalanced); //Push the enemy object into the EnemyList vector 
 						break;
 					}
@@ -411,6 +409,8 @@ void Update(float deltaTime)
 						enemyGiant = new Giant();
 						//Set the EnemyHealth in addition with the HealthIncreaseInterval(enemy health increases per wave)
 						enemyGiant->SetEnemyHealth(enemyGiant->GetEnemyHealth() + EnemyHealthIncreaseInterval);
+						enemyGiant->SetPosition(rand() % (LineNodesSX[0] - (LineNodesSX[0] - 100) + 1)
+							+ (LineNodesSX[0] - 100), LineNodesSY[0]);
 						enemyList.push_back(enemyGiant); //Push the enemy object into the EnemyList vector 
 						break;
 					}
@@ -446,7 +446,6 @@ void Render()
 	App::DrawLine(LineNodesSX[1], LineNodesSY[1], LineNodesEX[1], LineNodesEY[1], r, g, b);
 	App::DrawLine(LineNodesSX[2], LineNodesSY[2], LineNodesEX[2], LineNodesEY[2], r, g, b);
 	App::DrawLine(LineNodesSX[3], LineNodesSY[3], LineNodesEX[3], LineNodesEY[3], r, g, b);
-	App::DrawLine(LineNodesSX[4], LineNodesSY[4], LineNodesEX[4], LineNodesEY[4], r, g, b);
 	//Maybe a nested for loop instead...? oh well :C
 
 	//If the TowerList Vector is NOT empty 

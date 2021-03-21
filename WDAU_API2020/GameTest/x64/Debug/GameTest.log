@@ -1,8 +1,26 @@
 ﻿  GameTest.cpp
-C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(267,23): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
-C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(327,40): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
-C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(365,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(383,33): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(261,23): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(321,40): warning C4244: '-=': conversion from 'float' to 'int', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(359,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(377,33): warning C4244: '+=': conversion from 'float' to 'int', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(393,47): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(393,8): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(403,47): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(403,8): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(413,47): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
+          with
+          [
+              _Ty=int
+          ]
+C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(413,8): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(445,77): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
@@ -79,26 +97,6 @@ C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(448,45)
               _Ty=int
           ]
 C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(448,29): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(449,77): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(449,61): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(449,45): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
-          with
-          [
-              _Ty=int
-          ]
-C:\Users\johna\Desktop\UbisoftNXT2021\WDAU_API2020\GameTest\GameTest.cpp(449,29): warning C4244: 'argument': conversion from '_Ty' to 'float', possible loss of data
           with
           [
               _Ty=int

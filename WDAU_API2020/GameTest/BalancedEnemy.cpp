@@ -4,7 +4,7 @@
 /*INITIALIZING VARIABLES*/
 BalancedEnemy::BalancedEnemy() : Enemy() {
 	enemySprite = App::CreateSprite(".\\TestData\\Test.bmp", 8, 4); //Creating the BalancedEnemySprite
-	enemySprite->SetPosition(std::rand() % 1000 + 900, 100.0f); //Setting a default position 
+	enemySprite->SetPosition(0.0f, 0.0f); //Setting a default position 
 	float animationSpeed = 1.0f / 15.0f; //Initializing an animation speed variable and creating the animation
 	enemySprite->CreateAnimation(ANIM_LEFT, speed, { 8,9,10,11,12,13,14,15 });
 	enemySprite->SetScale(1.7f); //Default Enemy Sprite Size 
