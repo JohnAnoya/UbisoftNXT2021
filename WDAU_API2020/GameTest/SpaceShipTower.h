@@ -1,5 +1,6 @@
 #ifndef SPACESHIPTOWER_H 
 #define SPACESHIPTOWER_H 
+#include <algorithm>
 #include "app\app.h"
 #include "Enemy.h"
 

@@ -132,6 +132,7 @@ void BasicSpaceShip::AttackClosestEnemy(Enemy* enemy_) {
 					if (distanceFromEnemy < 50.0f) { //50 is an arbitrary number I use once the Bullet gets close enough
 						//Damage the enemy using the SetHealth method and the Bullet's damage variable
 						enemy_->SetEnemyHealth(enemy_->GetEnemyHealth() - bullet->GetBulletDamage());
+						App::PlaySound(".\\TestData\\Test.wav");
 
 						//Remove it from the Bullets vector and delete it from memory 
 						EnemyBullets.erase(std::remove(EnemyBullets.begin(), EnemyBullets.end(), bullet), EnemyBullets.end());

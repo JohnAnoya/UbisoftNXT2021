@@ -1,6 +1,6 @@
 #ifndef ENEMY_H 
 #define ENEMY_H 
-
+#include <algorithm>
 #include "app\app.h"
 enum //Sprite Animation ENUM
 {

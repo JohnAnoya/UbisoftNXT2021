@@ -72,8 +72,7 @@ int Health; //Health variable representing the user's health (NOT related to ene
 
 int Wave; //Current wave in the Tower Defense Game
 int NextWavePointReward; //Wave Reward Interval (User gets a certain amount of points after each wave) 
-int MinEnemiesToSpawn; //Minimum amount of enemies to spawn per wave (this integer increases every wave)
-int MaxEnemiesToSpawn; //Maximum amount of enemies to spawn per wave (this integer increases every wave)
+int MaxEnemiesToSpawn; //Amount of enemies to spawn per wave (this integer increases every wave)
 //I use both of these variables alongside std::rand() to choose a rough estimate of how many enemies to spawn
 
 float EnemyHealthIncreaseInterval; //variable 
@@ -91,8 +90,7 @@ void Init()
 	gameState = GameState::NOTPLAYING; //Initializing gameState Object
 	Wave = 0; 
 	NextWavePointReward = 0;
-	MinEnemiesToSpawn = 1;
-	MaxEnemiesToSpawn = 10; 
+	MaxEnemiesToSpawn = 2; 
 	EnemyHealthIncreaseInterval = 0.0f;
 
 	Points = 1000;
@@ -170,8 +168,7 @@ void Update(float deltaTime)
 			Wave = 0;
 			NextWavePointReward = 0;
 
-			MinEnemiesToSpawn = 1;
-			MaxEnemiesToSpawn = 10;
+			MaxEnemiesToSpawn = 2;
 			EnemyHealthIncreaseInterval = 0;
 			/*Resetting these variable values that may have been changed in a previous game*/
 		}
@@ -268,15 +265,7 @@ void Update(float deltaTime)
 					break;
 				}
 			}
-		}
-
-		/*
-		COME BACK TO THIS LATER
-		if (App::GetController().CheckButton(XINPUT_GAMEPAD_B, true))
-		{
-			App::PlaySound(".\\TestData\\Test.wav");
-		}
-		*/
+		}		
 
 		if (!towerList.empty()) { //If the TowerList vector is not empty 
 			for (auto tower : towerList) { //Loop through the vector
@@ -370,13 +359,12 @@ void Update(float deltaTime)
 
 		//ELSE if the EnemyList is empty, use std::rand() to instantiate a set of enemies between the Min/Max variables 
 		else if (enemyList.empty()) {
-			int amountOfEnemiesToSpawn = std::rand() % MaxEnemiesToSpawn + MinEnemiesToSpawn;
-
+			int amountOfEnemiesToSpawn = MaxEnemiesToSpawn;
+			
 			Points += NextWavePointReward; //Increase the Player's points after completing a wave
 			Wave += 1; //Increase the wave
 			NextWavePointReward += 250.0f; //Reward variable increased (given to the Player after the end of each wave)
-			MinEnemiesToSpawn += 2; //Increase the Min/MaxEnemiesToSpawn variables so more & more enemies spawn later on
-			MaxEnemiesToSpawn += 4;
+			MaxEnemiesToSpawn += 2; //Increase the MaxEnemiesToSpawn variable so more & more enemies spawn later on
 			for (int i = 0; i < amountOfEnemiesToSpawn; i++) {//For Loop to create as many enemies as the variable chose
 				int EnemyClassToSpawn = std::rand() % 3; //int Variable that picks a number from (0-2)
 
@@ -389,8 +377,8 @@ void Update(float deltaTime)
 						enemyDwarf = new Dwarf();
 						//Set the EnemyHealth in addition with the HealthIncreaseInterval(enemy health increases per wave)
 						enemyDwarf->SetEnemyHealth(enemyDwarf->GetEnemyHealth() + EnemyHealthIncreaseInterval);
-						enemyDwarf->SetPosition(rand() % (LineNodesSX[0] - (LineNodesSX[0] - 100) + 1)
-							+ (LineNodesSX[0] - 100), LineNodesSY[0]);
+						enemyDwarf->SetPosition(rand() % (LineNodesSX[0] - (LineNodesSX[0] - 150) + 1)
+							+ (LineNodesSX[0] - 150), LineNodesSY[0]);
 						enemyList.push_back(enemyDwarf); //Push the enemy object into the EnemyList vector 
 						break;
 					}
@@ -399,8 +387,8 @@ void Update(float deltaTime)
 						enemyBalanced = new BalancedEnemy();
 						//Set the EnemyHealth in addition with the HealthIncreaseInterval(enemy health increases per wave)
 						enemyBalanced->SetEnemyHealth(enemyBalanced->GetEnemyHealth() + EnemyHealthIncreaseInterval);
-						enemyBalanced->SetPosition(rand() % (LineNodesSX[0] - (LineNodesSX[0] - 100) + 1) 
-							+ (LineNodesSX[0] - 100), LineNodesSY[0]); //'Randomize' the position so the enemies don't spawn on top of eachother! 
+						enemyBalanced->SetPosition(rand() % (LineNodesSX[0] - (LineNodesSX[0] - 150) + 1) 
+							+ (LineNodesSX[0] - 150), LineNodesSY[0]); //'Randomize' the position so the enemies don't spawn on top of eachother! 
 						enemyList.push_back(enemyBalanced); //Push the enemy object into the EnemyList vector 
 						break;
 					}
@@ -409,8 +397,8 @@ void Update(float deltaTime)
 						enemyGiant = new Giant();
 						//Set the EnemyHealth in addition with the HealthIncreaseInterval(enemy health increases per wave)
 						enemyGiant->SetEnemyHealth(enemyGiant->GetEnemyHealth() + EnemyHealthIncreaseInterval);
-						enemyGiant->SetPosition(rand() % (LineNodesSX[0] - (LineNodesSX[0] - 100) + 1)
-							+ (LineNodesSX[0] - 100), LineNodesSY[0]);
+						enemyGiant->SetPosition(rand() % (LineNodesSX[0] - (LineNodesSX[0] - 150) + 1)
+							+ (LineNodesSX[0] - 150), LineNodesSY[0]);
 						enemyList.push_back(enemyGiant); //Push the enemy object into the EnemyList vector 
 						break;
 					}
@@ -421,7 +409,7 @@ void Update(float deltaTime)
 				}
 			}
 
-			EnemyHealthIncreaseInterval += 15.0f; //Increase the EnemyHealthIncreaseInterval AFTER the wave
+			EnemyHealthIncreaseInterval += 10.0f; //Increase the EnemyHealthIncreaseInterval AFTER the wave
 		}
 
 		break;

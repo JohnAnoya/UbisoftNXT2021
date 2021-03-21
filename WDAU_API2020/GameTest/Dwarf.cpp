@@ -10,7 +10,7 @@ Dwarf::Dwarf() : Enemy() {
 
 	EnemyMoveIndex = 0; //Default Enemy Move Index (Enemy will always start at Line Index 0!) 
 	health = 55.0f; //Default health for a Dwarf Enemy
-	speed = 2.0f; //Default Speed for a Dwarf Enemy 
+	speed = 1.5f; //Default Speed for a Dwarf Enemy 
 
 	PointsReward = 50; //The amount of points the user receives when killing the enemy
 }

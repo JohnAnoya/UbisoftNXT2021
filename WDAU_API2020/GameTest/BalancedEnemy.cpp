@@ -11,7 +11,7 @@ BalancedEnemy::BalancedEnemy() : Enemy() {
 
 	EnemyMoveIndex = 0; //Default Enemy Move Index (Enemy will always start at Line Index 0!) 
 	health = 100.0f; //Default health for a Balanced Enemy 
-	speed = 1.35f; //Default Speed for a Balanced Enemy 
+	speed = 1.0f; //Default Speed for a Balanced Enemy 
 
 	PointsReward = 75; //The amount of points the user receives when killing the enemy 
 }
