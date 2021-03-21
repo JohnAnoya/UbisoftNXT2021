@@ -67,9 +67,11 @@ bool isInShop;
 int Health;
 
 int Wave;
-int NextWavePointReward; 
+int NextWavePointReward;  
 int MinEnemiesToSpawn; 
-int MaxEnemiesToSpawn; 
+int MaxEnemiesToSpawn;
+
+float EnemyHealthIncreaseInterval;
 //------------------------------------------------------------------------
 
 
@@ -84,8 +86,9 @@ void Init()
 	NextWavePointReward = 0;
 	MinEnemiesToSpawn = 1;
 	MaxEnemiesToSpawn = 10; 
+	EnemyHealthIncreaseInterval = 0.0f;
 
-	Points = 1500;
+	Points = 1000;
 	Health = 500;
 	isInShop = false; 
 	shopSelection = Shop::NONE;
@@ -153,12 +156,13 @@ void Update(float deltaTime)
 		if (App::IsKeyPressed('P')) {
 			gameState = GameState::ISPLAYING;
 			Health = 500; 
-			Points = 1500; 
+			Points = 1000; 
 			Wave = 0;
 			NextWavePointReward = 0;
 
 			MinEnemiesToSpawn = 1;
 			MaxEnemiesToSpawn = 10;
+			EnemyHealthIncreaseInterval = 0;
 		}
 
 		break;
@@ -351,18 +355,21 @@ void Update(float deltaTime)
 				switch (EnemyClassToSpawn) {
 					case 0: {
 						enemyDwarf = new Dwarf();
+						enemyDwarf->SetEnemyHealth(enemyDwarf->GetEnemyHealth() + EnemyHealthIncreaseInterval);
 						enemyList.push_back(enemyDwarf);
 						break;
 					}
 
 					case 1: {
 						enemyBalanced = new BalancedEnemy();
+						enemyBalanced ->SetEnemyHealth(enemyBalanced->GetEnemyHealth() + EnemyHealthIncreaseInterval);
 						enemyList.push_back(enemyBalanced);
 						break;
 					}
 
 					case 2: {
 						enemyGiant = new Giant();
+						enemyGiant->SetEnemyHealth(enemyGiant->GetEnemyHealth() + EnemyHealthIncreaseInterval);
 						enemyList.push_back(enemyGiant);
 						break;
 					}
@@ -372,6 +379,8 @@ void Update(float deltaTime)
 					}
 				}
 			}
+
+			EnemyHealthIncreaseInterval += 15.0f;
 		}
 
 		break;

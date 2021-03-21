@@ -10,9 +10,9 @@ BalancedEnemy::BalancedEnemy() : Enemy() {
 
 	EnemyMoveIndex = 0;
 	health = 100.0f;
-	speed = 1.5f;
+	speed = 1.35f;
 
-	PointsReward = 300;
+	PointsReward = 75;
 }
 
 BalancedEnemy::~BalancedEnemy() {

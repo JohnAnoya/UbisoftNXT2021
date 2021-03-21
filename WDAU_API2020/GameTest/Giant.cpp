@@ -12,7 +12,7 @@ Giant::Giant() : Enemy() {
 	health = 200.0f;
 	speed = 0.75f;
 
-	PointsReward = 500;
+	PointsReward = 150;
 }
 
 Giant::~Giant() {

@@ -10,9 +10,9 @@ Dwarf::Dwarf() : Enemy() {
 
 	EnemyMoveIndex = 0; 
 	health = 55.0f; 
-	speed = 3.0f;
+	speed = 2.0f;
 
-	PointsReward = 100;
+	PointsReward = 50;
 }
 
 Dwarf::~Dwarf() {
